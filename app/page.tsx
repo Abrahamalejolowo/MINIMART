@@ -6,6 +6,7 @@ import { SellerCtaSection } from "@/components/seller-cta-section"
 import { TrustBadgesSection } from "@/components/trust-badges-section"
 import { Footer } from "@/components/footer"
 import { IntroSection } from "@/components/intro-section"
+import { HowItWorks } from "@/components/how-it-work"
 
 export default function Page() {
   return (
@@ -16,8 +17,9 @@ export default function Page() {
         <IntroSection/>
         <CategoriesSection />
         <LatestArrivalsSection />
-        <SellerCtaSection />
+        <HowItWorks />
         <TrustBadgesSection />
+        <SellerCtaSection />
       </main>
       <Footer />
     </div>

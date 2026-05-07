@@ -1,158 +1,23 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { ShopFilters } from '@/components/shop-filters'
 import { ProductGrid } from '@/components/product-grid'
 
-// Mock product data
-const allProducts = [
-  {
-    id: '1',
-    name: 'Organic Pure Shea Butter',
-    price: 4500,
-    image: '/shoe1.webp',
-    category: 'Beauty',
-    rating: 5,
-    reviews: 234,
-  },
-  {
-    id: '2',
-    name: 'Shoe',
-    price: 15000,
-    image: '/shoe2.webp',
-    category: 'Fashion',
-    rating: 5,
-    reviews: 156,
-  },
-  {
-    id: '3',
-    name: 'Men Shirts',
-    price: 3200,
-    image: '/store4.webp',
-    category: 'Fashion',
-    rating: 4,
-    reviews: 89,
-  },
-  {
-    id: '4',
-    name: '',
-    price: 18500,
-    image: '/store4.webp',
-    category: 'Fashion',
-    rating: 5,
-    reviews: 120,
-  },
-  {
-    id: '5',
-    name: 'Set men T-Shirt',
-    price: 8900,
-    image: '/store5.webp',
-    category: 'Fashion',
-    rating: 4,
-    reviews: 95,
-  },
-  {
-    id: '6',
-     name: 'Set men T-Shirt',
-    price: 8900,
-    image: '/store5.webp',
-    category: 'Fashion',
-    rating: 5,
-    reviews: 203,
-  },
-  {
-    id: '7',
-    name: 'Organic Pure Shea Butter',
-    price: 4500,
-    image: '/shoe1.webp',
-    category: 'Beauty',
-    rating: 4,
-    reviews: 67,
-  },
-  {
-    id: '8',
-    name: 'Shoe',
-    price: 15000,
-    image: '/shoe2.webp',
-    category: 'Home',
-    rating: 5,
-    reviews: 45,
-  },
-   {
-    id: '9',
-    name: 'Organic Pure Shea Butter',
-    price: 4500,
-    image: '/shoe1.webp',
-    category: 'Beauty',
-    rating: 5,
-    reviews: 234,
-  },
-  {
-    id: '10',
-    name: 'Shoe',
-    price: 15000,
-    image: '/shoe2.webp',
-    category: 'Fashion',
-    rating: 5,
-    reviews: 156,
-  },
-  {
-    id: '11',
-    name: 'Men Shirts',
-    price: 3200,
-    image: '/store4.webp',
-    category: 'Fashion',
-    rating: 4,
-    reviews: 89,
-  },
-  {
-    id: '12',
-    name: '',
-    price: 18500,
-    image: '/store4.webp',
-    category: 'Fashion',
-    rating: 5,
-    reviews: 120,
-  },
-  {
-    id: '13',
-    name: 'Set men T-Shirt',
-    price: 8900,
-    image: '/store5.webp',
-    category: 'Fashion',
-    rating: 4,
-    reviews: 95,
-  },
-  {
-    id: '14',
-     name: 'Set men T-Shirt',
-    price: 8900,
-    image: '/store5.webp',
-    category: 'Fashion',
-    rating: 5,
-    reviews: 203,
-  },
-  {
-    id: '15',
-    name: 'Organic Pure Shea Butter',
-    price: 4500,
-    image: '/shoe1.webp',
-    category: 'Beauty',
-    rating: 4,
-    reviews: 67,
-  },
-  {
-    id: '16',
-    name: 'Shoe',
-    price: 15000,
-    image: '/shoe2.webp',
-    category: 'Home',
-    rating: 5,
-    reviews: 45,
-  },
-]
+interface Product {
+  id: number
+  title: string
+  price: number
+  image: string
+  category: string
+  description: string
+  rating: {
+    rate: number
+    count: number
+  }
+}
 
 interface Filters {
   category: string
@@ -161,100 +26,162 @@ interface Filters {
 }
 
 export default function ShopPage() {
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+
   const [filters, setFilters] = useState<Filters>({
     category: 'all',
     priceRange: [0, 100000],
     rating: 0,
   })
+
   const [searchQuery, setSearchQuery] = useState('')
 
+  // FETCH PRODUCTS
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('https://fakestoreapi.com/products')
+        const data = await response.json()
+
+        setProducts(data)
+        setLoading(false)
+      } catch (error) {
+        console.error('Error fetching products:', error)
+        setLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
+
+  // FILTER PRODUCTS
   const filteredProducts = useMemo(() => {
-    return allProducts.filter((product) => {
+    return products.filter((product) => {
       // Category filter
-      if (filters.category !== 'all' && product.category.toLowerCase() !== filters.category) {
+      if (
+        filters.category !== 'all' &&
+        product.category.toLowerCase() !== filters.category
+      ) {
         return false
       }
 
       // Price filter
-      if (product.price < filters.priceRange[0] || product.price > filters.priceRange[1]) {
+      if (
+        product.price < filters.priceRange[0] ||
+        product.price > filters.priceRange[1]
+      ) {
         return false
       }
 
       // Rating filter
-      if (filters.rating > 0 && product.rating < filters.rating) {
+      if (
+        filters.rating > 0 &&
+        product.rating.rate < filters.rating
+      ) {
         return false
       }
 
       // Search filter
       if (
         searchQuery &&
-        !product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        !product.title
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
       ) {
         return false
       }
 
       return true
     })
-  }, [filters, searchQuery])
+  }, [products, filters, searchQuery])
 
-  const handleAddToCart = (product: typeof allProducts[0]) => {
+  // ADD TO CART
+  const handleAddToCart = (product: any) => {
     console.log('Added to cart:', product)
-    // Cart logic will be implemented in the cart context
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-background">
       <Navbar />
+
       <main className="flex-1">
-        {/* Header */}
-        <div className="border-b border-gray-200 bg-white py-8">
+
+        {/* HEADER */}
+        <div className="border-b border-gray-200 bg-white py-10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h1 className="font-heading text-4xl font-bold text-foreground">
+
+            <h1 className="font-heading text-4xl font-bold text-foreground sm:text-5xl">
               Shop All Products
             </h1>
-            <p className="mt-2 text-gray-600">
+
+            <p className="mt-3 text-gray-600">
               Discover authentic, quality Nigerian products
             </p>
+
           </div>
         </div>
 
-        {/* Shop Content */}
+        {/* SHOP CONTENT */}
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
           <div className="grid gap-8 lg:grid-cols-4">
-            {/* Filters Sidebar */}
+
+            {/* FILTERS */}
             <div className="lg:col-span-1">
               <ShopFilters onFilterChange={setFilters} />
             </div>
 
-            {/* Products */}
+            {/* PRODUCTS */}
             <div className="lg:col-span-3">
-              {/* Search Bar */}
+
+              {/* SEARCH */}
               <div className="mb-6">
                 <input
                   type="text"
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 text-foreground placeholder-gray-400"
+                  className="w-full rounded-xl border border-gray-300 px-4 py-3 text-foreground placeholder-gray-400 outline-none focus:border-green-600"
                 />
               </div>
 
-              {/* Results Count */}
-              <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {/* RESULTS */}
+              <div className="mb-6">
                 <p className="text-sm text-gray-600">
                   Showing {filteredProducts.length} products
                 </p>
               </div>
 
-              {/* Products Grid */}
-              <ProductGrid
-                products={filteredProducts}
-                onAddToCart={handleAddToCart}
-              />
+              {/* LOADING */}
+              {loading ? (
+                <div className="flex items-center justify-center py-32">
+                  <p className="text-lg text-gray-600">
+                    Loading products...
+                  </p>
+                </div>
+              ) : (
+
+                <ProductGrid
+                  products={filteredProducts.map((product) => ({
+                    id: String(product.id),
+                    name: product.title,
+                    price: product.price,
+                    image: product.image,
+                    category: product.category,
+                    rating: product.rating.rate,
+                    reviews: product.rating.count,
+                  }))}
+                  onAddToCart={handleAddToCart}
+                />
+
+              )}
+
             </div>
           </div>
         </div>
       </main>
+
       <Footer />
     </div>
   )
