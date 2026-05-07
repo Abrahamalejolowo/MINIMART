@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===============================
+   Custom Utilities
+================================= */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ===============================
+   Theme Variables
+================================= */
+@layer base {
+  :root {
+    /* Core Colors */
+    --background: 0 0% 100%;
+    --foreground: 218 14% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 13%;
+
+    /* 🔥 Brand green (#49732C) */
+    --green: 100 44% 31%;
+    --green-foreground: 0 0% 100%;
+
+    --secondary: 100 20% 95%;
+    --secondary-foreground: 0 0% 13%;
+
+    --text-muted: 210 14% 60%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 100 20% 95%;
+    --accent-foreground: 0 0% 13%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 100 44% 31%;
+
+    /* Charts */
+    --chart-1: 100 44% 31%;
+    --chart-2: 120 35% 40%;
+    --chart-3: 140 30% 35%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    /* Radius */
+    --radius: 0.5rem;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-green: 100 44% 31%;
+    --sidebar-green-foreground: 0 0% 100%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 100 44% 31%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
