@@ -73,13 +73,18 @@ export default function HeroSection() {
                   transition={{ delay: 0.8 }}
                   className="mt-8 flex flex-col sm:flex-row gap-4"
                 >
-                  <Button className="bg-green-600 hover:bg-green-700 text-white px-6 py-6 text-base rounded-xl flex items-center gap-2">
-                    Explore Products <ArrowRight className="h-4 w-4" />
-                  </Button>
+                 <Button
+  onClick={() => {
+    document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" })
+  }}
+  className="bg-green-600 hover:bg-green-700 text-white px-6 py-6 text-base rounded-xl flex items-center gap-2"
+>
+  Explore Products <ArrowRight className="h-4 w-4" />
+</Button>
 
                   <Button
                     variant="outline"
-                    className="border-white text-white hover:bg-white hover:text-black px-6 py-6 text-base rounded-xl"
+                    className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-6 py-6 text-base rounded-xl"
                   >
                     Partner with Us
                   </Button>

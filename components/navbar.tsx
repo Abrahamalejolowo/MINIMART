@@ -16,14 +16,14 @@ export function Navbar() {
         {/* Logo */}
         {/* Logo */}
         <Link href="/" className="flex items-center">
-       <Image
-  src="/min2.png"
-  alt="Minmart Logo"
-  width={42}
-  height={42}
-  className="object-contain"
-  priority
-/>
+          <Image
+            src="/min2.png"
+            alt="Minmart Logo"
+            width={42}
+            height={42}
+            className="object-contain"
+            priority
+          />
         </Link>
         {/* Desktop Nav Links */}
         <ul className="hidden items-center gap-8 md:flex">

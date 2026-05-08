@@ -1,4 +1,5 @@
-import Link from "next/link"
+import Link from "next/link";
+import Image from "next/image";
 
 const footerLinks = {
   MARKETPLACE: [
@@ -6,12 +7,6 @@ const footerLinks = {
     { label: "New Arrivals", href: "/shop?sort=new" },
     { label: "Best Sellers", href: "/shop?sort=popular" },
     { label: "Gift Cards", href: "/gift-cards" },
-  ],
-  SELLING: [
-    { label: "Become a Seller", href: "/sell" },
-    { label: "Seller Dashboard", href: "/dashboard" },
-    { label: "Fees & Payouts", href: "/sell/fees" },
-    { label: "Guidelines", href: "/sell/guidelines" },
   ],
   COMPANY: [
     { label: "About Us", href: "/about" },
@@ -25,7 +20,7 @@ const footerLinks = {
     { label: "Terms of Service", href: "/terms" },
     { label: "Refund Policy", href: "/refund" },
   ],
-}
+};
 
 export function Footer() {
   return (
@@ -35,15 +30,22 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-green">
-                <span className="text-sm font-bold text-green-foreground">M</span>
-              </span>
+             <div className="relative h-12 w-12 overflow-hidden rounded-md bg-white p-1">
+  <Image
+    src="/min2.png"
+    alt="Minmart Logo"
+    fill
+    className="object-contain"
+  />
+</div>
               <span className="font-heading text-xl font-bold text-background">
-                Min<span className="text-green">mart</span>
+                Min<span className="text-green-700">mart</span>
               </span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-background/60">
-              {"Minmart is Nigeria's premier digital marketplace connecting authentic local producers with global quality seekers."}
+              {
+                "Minmart is Nigeria's premier digital marketplace connecting authentic local producers with global quality seekers."
+              }
             </p>
             {/* Social */}
             <div className="mt-6 flex gap-3">
@@ -95,5 +97,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
