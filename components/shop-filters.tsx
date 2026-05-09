@@ -1,47 +1,97 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface ShopFiltersProps {
   onFilterChange: (filters: {
     category: string
+    subcategories: string[] // Changed to array
     priceRange: [number, number]
     rating: number
   }) => void
 }
 
+const categories = [
+  { id: 'all', name: 'All', subcategories: [] },
+  {
+    id: 'footwear',
+    name: 'Footwear',
+    subcategories: ['Sneakers', 'Loafers', 'Sandals', 'Handmade Shoes', 'Leather Footwear'],
+  },
+  {
+    id: 'fashion',
+    name: 'Fashion',
+    subcategories: ['Ready-to-Wear', 'Streetwear', 'Womenswear', 'Menswear', 'Native Wear'],
+  },
+  {
+    id: 'beauty',
+    name: 'Beauty & Skincare',
+    subcategories: ['Skincare', 'Oils', 'Soaps', 'Perfumes', 'Cosmetics'],
+  },
+  {
+    id: 'food',
+    name: 'Food & Spices',
+    subcategories: ['Spices', 'Packaged Foods', 'Snacks', 'Local Food Products', 'Coffee', 'Tea'],
+  },
+  {
+    id: 'leather',
+    name: 'Leather Goods',
+    subcategories: ['Bags', 'Wallets', 'Belts', 'Leather Accessories'],
+  },
+  {
+    id: 'home',
+    name: 'Home & Living',
+    subcategories: ['Decor', 'Handmade Items', 'Candles', 'Kitchenware'],
+  },
+]
+
 export function ShopFilters({ onFilterChange }: ShopFiltersProps) {
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]) // State as Array
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000])
   const [selectedRating, setSelectedRating] = useState(0)
   const [open, setOpen] = useState(false)
 
-  // ✅ UPDATED CATEGORIES
-  const categories = [
-    { id: 'all', name: 'All' },
-    { id: 'footwear', name: 'Footwear' },
-    { id: 'fashion', name: 'Fashion' },
-    { id: 'beauty', name: 'Beauty & Skincare' },
-    { id: 'food', name: 'Food & Spices' },
-    { id: 'home', name: 'Home & Living' },
-  ]
-
   const handleCategoryChange = (categoryId: string) => {
     setSelectedCategory(categoryId)
+    setSelectedSubcategories([]) // Reset subcategories when main category changes
+
+    setExpandedCategory(expandedCategory === categoryId ? null : categoryId)
+
     onFilterChange({
       category: categoryId,
+      subcategories: [],
+      priceRange,
+      rating: selectedRating,
+    })
+  }
+
+  const toggleSubcategory = (subcategory: string) => {
+    const newSubcategories = selectedSubcategories.includes(subcategory)
+      ? selectedSubcategories.filter((s) => s !== subcategory) // Remove if exists
+      : [...selectedSubcategories, subcategory] // Add if not exists
+
+    setSelectedSubcategories(newSubcategories)
+
+    onFilterChange({
+      category: selectedCategory,
+      subcategories: newSubcategories,
       priceRange,
       rating: selectedRating,
     })
   }
 
   const handlePriceChange = (min: number, max: number) => {
-    setPriceRange([min, max])
+    const safeMin = isNaN(min) ? 0 : min
+    const safeMax = isNaN(max) ? 100000 : max
+    setPriceRange([safeMin, safeMax])
     onFilterChange({
       category: selectedCategory,
-      priceRange: [min, max],
+      subcategories: selectedSubcategories,
+      priceRange: [safeMin, safeMax],
       rating: selectedRating,
     })
   }
@@ -50,132 +100,132 @@ export function ShopFilters({ onFilterChange }: ShopFiltersProps) {
     setSelectedRating(rating)
     onFilterChange({
       category: selectedCategory,
+      subcategories: selectedSubcategories,
       priceRange,
       rating,
     })
   }
 
+  const resetFilters = () => {
+    setSelectedCategory('all')
+    setSelectedSubcategories([])
+    setExpandedCategory(null)
+    setPriceRange([0, 100000])
+    setSelectedRating(0)
+
+    onFilterChange({
+      category: 'all',
+      subcategories: [],
+      priceRange: [0, 100000],
+      rating: 0,
+    })
+  }
+
   return (
     <>
-      {/* MOBILE BUTTON */}
+      {/* Mobile Toggle */}
       <div className="mb-4 md:hidden">
-        <Button
-          onClick={() => setOpen(!open)}
-          variant="outline"
-          className="w-full flex justify-between items-center py-6"
-        >
+        <Button onClick={() => setOpen(!open)} variant="outline" className="w-full flex items-center justify-between py-6">
           Filters
-          <ChevronDown className={`transition ${open ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
         </Button>
       </div>
 
-      {/* FILTER PANEL */}
-      <div
-        className={`
-          ${open ? 'block' : 'hidden'}
-          md:block space-y-6 rounded-2xl border bg-white p-5
-        `}
-      >
-
-        {/* CATEGORY */}
+      <div className={`${open ? 'block' : 'hidden'} md:block space-y-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm`}>
+        {/* Categories */}
         <div>
-          <h3 className="mb-3 text-sm font-medium">Category</h3>
+          <h3 className="mb-4 text-sm font-semibold text-foreground">Categories</h3>
+          <div className="space-y-2">
+            {categories.map((category) => {
+              const isSelected = selectedCategory === category.id
+              const isExpanded = expandedCategory === category.id
 
-          <div className="flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => handleCategoryChange(cat.id)}
-                className={`px-3 py-1 rounded-full text-xs border transition ${
-                  selectedCategory === cat.id
-                    ? 'bg-green-600 text-white border-green-600'
-                    : 'bg-white text-foreground border-gray-300'
-                }`}
-              >
-                {cat.name}
-              </button>
-            ))}
+              return (
+                <div key={category.id} className="rounded-xl border border-gray-100 overflow-hidden">
+                  <button
+                    onClick={() => handleCategoryChange(category.id)}
+                    className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition ${
+                      isSelected ? 'bg-green-600 text-white' : 'bg-white text-foreground hover:bg-gray-50'
+                    }`}
+                  >
+                    <span>{category.name}</span>
+                    {category.subcategories.length > 0 && (
+                      <ChevronRight className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                    )}
+                  </button>
+
+                  {/* Multi-select Subcategories */}
+                  {isExpanded && category.subcategories.length > 0 && (
+                    <div className="bg-gray-50/50 space-y-1 px-3 py-3 border-t border-gray-100">
+                      {category.subcategories.map((sub) => {
+                        const isSubSelected = selectedSubcategories.includes(sub)
+                        return (
+                          <button
+                            key={sub}
+                            onClick={() => toggleSubcategory(sub)}
+                            className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs transition ${
+                              isSubSelected ? 'bg-green-100 text-green-800 font-semibold' : 'text-gray-600 hover:bg-gray-100'
+                            }`}
+                          >
+                            <div className={`h-3 w-3 rounded border flex items-center justify-center ${isSubSelected ? 'bg-green-600 border-green-600' : 'border-gray-300'}`}>
+                                {isSubSelected && <div className="h-1.5 w-1.5 bg-white rounded-full" />}
+                            </div>
+                            {sub}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
 
-        {/* PRICE */}
+        {/* Price and Rating sections remain the same... */}
+        {/* Price */}
         <div>
-          <h3 className="mb-3 text-sm font-medium">Price</h3>
-
+          <h3 className="mb-3 text-sm font-semibold text-foreground">Price Range</h3>
           <div className="flex gap-2">
             <input
               type="number"
               value={priceRange[0]}
-              onChange={(e) =>
-                handlePriceChange(parseInt(e.target.value), priceRange[1])
-              }
-              className="w-full border rounded-lg px-2 py-2 text-sm"
+              onChange={(e) => handlePriceChange(parseInt(e.target.value), priceRange[1])}
+              className="w-full rounded-lg border px-3 py-2 text-sm"
               placeholder="Min"
             />
-
             <input
               type="number"
               value={priceRange[1]}
-              onChange={(e) =>
-                handlePriceChange(priceRange[0], parseInt(e.target.value))
-              }
-              className="w-full border rounded-lg px-2 py-2 text-sm"
+              onChange={(e) => handlePriceChange(priceRange[0], parseInt(e.target.value))}
+              className="w-full rounded-lg border px-3 py-2 text-sm"
               placeholder="Max"
             />
           </div>
         </div>
 
-        {/* RATING */}
+        {/* Rating */}
         <div>
-          <h3 className="mb-3 text-sm font-medium">Rating</h3>
-
+          <h3 className="mb-3 text-sm font-semibold text-foreground">Rating</h3>
           <div className="flex flex-wrap gap-2">
-            {[5, 4, 3, 2, 1].map((r) => (
+            {[5, 4, 3, 2, 1].map((rating) => (
               <button
-                key={r}
-                onClick={() => handleRatingChange(r)}
-                className={`px-3 py-1 rounded-full text-xs border transition ${
-                  selectedRating === r
-                    ? 'bg-green-600 text-white border-green-600'
-                    : 'bg-white text-foreground border-gray-300'
+                key={rating}
+                onClick={() => handleRatingChange(rating)}
+                className={`rounded-full border px-3 py-1 text-xs transition ${
+                  selectedRating === rating ? 'bg-green-600 text-white border-green-600' : 'bg-white border-gray-300 text-foreground'
                 }`}
               >
-                ⭐ {r}+
+                ⭐ {rating}+
               </button>
             ))}
           </div>
         </div>
 
-        {/* ACTIONS */}
         <div className="flex gap-2 pt-2">
-
-          <Button
-            onClick={() => {
-              setSelectedCategory('all')
-              setPriceRange([0, 100000])
-              setSelectedRating(0)
-
-              onFilterChange({
-                category: 'all',
-                priceRange: [0, 100000],
-                rating: 0,
-              })
-            }}
-            variant="outline"
-            className="w-full"
-          >
-            Reset
-          </Button>
-
-          <Button
-            className="w-full bg-green-600 text-white"
-            onClick={() => setOpen(false)}
-          >
-            Apply
-          </Button>
-
+          <Button variant="outline" className="w-full" onClick={resetFilters}>Reset</Button>
+          <Button className="w-full bg-green-600 text-white hover:bg-green-700" onClick={() => setOpen(false)}>Apply</Button>
         </div>
-
       </div>
     </>
   )

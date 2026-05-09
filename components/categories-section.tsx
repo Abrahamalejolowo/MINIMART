@@ -1,10 +1,16 @@
-import Image from "next/image"
-import Link from "next/link"
+'use client'
 
-import shoe1 from "../public/shoe1.webp"
+import Image from "next/image"
+import Link from "next/link"  
+// import shoe1 from "../public/shoe1.webp"
 import Shore3 from "../public/Store3.webp"
 import Store5 from "../public/store5.webp"
 import footwear from "../public/shoe2.webp"
+import Home from "../public/Home.webp"
+import Artisan from "../public/Artisan.webp"
+import Beauty from "../public/Beauty.webp"
+import leather from "../public/leather.avif"
+
 
 const categories = [
   {
@@ -17,14 +23,28 @@ const categories = [
   {
     title: "Fashion",
     description: "Modern Nigerian fashion and cultural styles",
-    image: shoe1,
+    image: Store5,
     href: "/shop?category=fashion",
     cta: "Explore Fashion",
   },
   {
+    title: "Leather Goods",
+    description: "Premium bags, wallets, belts, and artisan accessories",
+    image: leather,
+    href: "/shop?category=leather",
+    cta: "Explore Leather",
+  },
+  {
+    title: "Home & Living",
+    description: "Handmade decor, candles, and artisan kitchenware",
+    image: Home, 
+    href: "/shop?category=home",
+    cta: "Explore Home",
+  },
+  {
     title: "Beauty & Skincare",
     description: "Organic skincare and beauty essentials",
-    image: Store5,
+    image: Beauty,
     href: "/shop?category=beauty",
     cta: "Explore Beauty",
   },
@@ -34,6 +54,13 @@ const categories = [
     image: Shore3,
     href: "/shop?category=food",
     cta: "Explore Food",
+  },
+  {
+    title: "Crafts & Artisanal",
+    description: "Woven items, cultural pieces and handmade creative crafts",
+    image: Artisan,
+    href: "/shop?category=crafts",
+    cta: "Explore Crafts",
   },
 ]
 
@@ -48,7 +75,6 @@ export function CategoriesSection() {
             <h2 className="font-heading text-3xl font-bold text-foreground md:text-4xl">
               Shop by Category
             </h2>
-
             <p className="mt-2 text-sm text-muted-foreground">
               Discover curated Nigerian-made products across different categories
             </p>
@@ -62,26 +88,33 @@ export function CategoriesSection() {
           </Link>
         </div>
 
-        {/* MOBILE SCROLL + DESKTOP GRID */}
+        {/* MOBILE SNAP SCROLL + DESKTOP GRID */}
         <div
           className="
             mt-10
-            flex gap-4 overflow-x-auto scroll-smooth pb-2
-            md:grid md:grid-cols-2 lg:grid-cols-4 md:overflow-visible
+            flex gap-4 
+            overflow-x-auto 
+            pb-6
+            /* Scroll Snap Logic */
+            snap-x snap-mandatory 
+            scrollbar-hide
+            md:grid md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:snap-none
           "
         >
-
           {categories.map((cat) => (
             <Link
               key={cat.title}
               href={cat.href}
               className="
-                relative min-w-[85%] sm:min-w-[60%] md:min-w-0
+                relative 
+                /* Card width on mobile */
+                min-w-[85%] sm:min-w-[60%] md:min-w-0
+                /* Snapping point */
+                snap-center 
                 aspect-[4/5] flex-shrink-0
                 overflow-hidden rounded-3xl group
               "
             >
-
               {/* IMAGE */}
               <Image
                 src={cat.image}
@@ -91,28 +124,24 @@ export function CategoriesSection() {
               />
 
               {/* OVERLAY */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
               {/* CONTENT */}
               <div className="absolute bottom-0 left-0 p-6">
-
                 <h3 className="text-2xl font-bold text-white">
                   {cat.title}
                 </h3>
 
-                <p className="mt-2 text-sm text-white/80 leading-relaxed">
+                <p className="mt-2 text-sm text-white/80 leading-relaxed line-clamp-2">
                   {cat.description}
                 </p>
 
-                <span className="mt-4 inline-block rounded-xl bg-white/20 px-4 py-2 text-xs font-medium text-white backdrop-blur-sm transition group-hover:bg-white/30">
+                <span className="mt-4 inline-block rounded-xl bg-white/20 px-4 py-2 text-xs font-medium text-white backdrop-blur-sm transition group-hover:bg-white/40">
                   {cat.cta}
                 </span>
-
               </div>
-
             </Link>
           ))}
-
         </div>
 
         {/* MOBILE VIEW ALL */}
@@ -122,7 +151,6 @@ export function CategoriesSection() {
         >
           View All →
         </Link>
-
       </div>
     </section>
   )

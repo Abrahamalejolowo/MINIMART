@@ -17,10 +17,10 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
-            src="/min2.png"
+            src="/SENT.png"
             alt="Minmart Logo"
-            width={42}
-            height={42}
+            width={130}
+            height={52}
             className="object-contain"
             priority
           />

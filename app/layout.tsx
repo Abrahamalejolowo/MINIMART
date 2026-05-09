@@ -9,7 +9,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Minmart - Innovative Nigerian Marketplace',
+  title: 'Minmart',
   description:
     'Empowering local creators, delivering authentic quality to your doorstep.',
 }
