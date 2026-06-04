@@ -4,33 +4,66 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Heart, ShoppingCart } from "lucide-react"
 
+// IMPORTING FROM YOUR CENTRAL DATABASE FILE
+import { marketplaceDatabase } from "../app/database/page"
+
 interface Product {
-  id: number
+  id: string | number
   title: string
   price: number
   image: string
   category: string
+  isLocal?: boolean
 }
 
-function formatNaira(amount: number) {
-  return new Intl.NumberFormat("en-NG").format(amount * 1000)
+// Fixed formatting to support both raw local Naira prices and standard mock API numbers
+function formatNaira(amount: number, isLocal?: boolean) {
+  const finalAmount = isLocal ? amount : amount * 1000
+  return new Intl.NumberFormat("en-NG").format(finalAmount)
 }
 
 export function LatestArrivalsSection() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
 
-  // FETCH FROM API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await fetch(
-          "https://fakestoreapi.com/products?limit=8"
+          "https://fakestoreapi.com/products?limit=6"
         )
-        const data = await res.json()
-        setProducts(data)
+        const apiData = await res.json()
+
+        // 1. Format external API products to fit our typing layout
+        const formattedApiProducts = apiData.map((p: any) => ({
+          id: p.id,
+          title: p.title,
+          price: p.price,
+          image: p.image,
+          category: p.category.includes("clothing") ? "fashion" : p.category,
+          isLocal: false
+        }))
+
+        // 2. Format our local database listings to match the display interface structure
+        const formattedLocalProducts = marketplaceDatabase.map((p) => ({
+          id: p.id,
+          title: p.title,
+          price: p.price,
+          image: p.image,
+          category: p.category,
+          isLocal: true
+        }))
+
+        // 3. Mix both datasets together and limit the final section display to 8 items total
+        const mixedCollection = [...formattedLocalProducts, ...formattedApiProducts]
+        
+        // Shuffles the array so local and API elements interweave randomly
+        const shuffledCollection = mixedCollection.sort(() => 0.5 - Math.random())
+
+        setProducts(shuffledCollection.slice(0, 8))
       } catch (error) {
         console.error("Error fetching products:", error)
+        setProducts(marketplaceDatabase.slice(0, 8).map(p => ({ ...p, isLocal: true })))
       } finally {
         setLoading(false)
       }
@@ -68,10 +101,10 @@ export function LatestArrivalsSection() {
           {products.map((product) => (
             <div
               key={product.id}
-              className="group overflow-hidden rounded-2xl bg-background shadow-sm transition hover:shadow-md"
+              className="group relative overflow-hidden rounded-2xl bg-background shadow-sm transition hover:shadow-md border border-zinc-100"
             >
 
-              {/* IMAGE */}
+              {/* IMAGE CONTAINER */}
               <div className="relative aspect-square bg-white overflow-hidden">
                 <Image
                   src={product.image}
@@ -81,32 +114,32 @@ export function LatestArrivalsSection() {
                   sizes="(max-width: 640px) 100vw, 25vw"
                 />
 
-                {/* WISHLIST */}
+                {/* WISHLIST BUTTON */}
                 <button
-                  className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm hover:text-green-600"
+                  className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm text-zinc-400 hover:text-green-600 shadow-xs transition-colors"
                 >
                   <Heart className="h-4 w-4" />
                 </button>
               </div>
 
-              {/* INFO */}
+              {/* INFO PACK */}
               <div className="p-4">
 
                 <span className="text-[11px] uppercase tracking-wider text-green-600 font-bold">
                   {product.category}
                 </span>
 
-                <h3 className="mt-1 text-sm font-light text-foreground line-clamp-2">
+                <h3 className="mt-1 text-sm font-light text-foreground line-clamp-2 min-h-[40px]">
                   {product.title}
                 </h3>
 
-                <div className="mt-3 flex items-center justify-between">
+                <div className="mt-3 flex items-center justify-between pt-2 border-t border-zinc-50">
 
-                  <span className="font-bold text-foreground">
-                    ₦{formatNaira(product.price)}
+                  <span className="font-bold text-foreground text-base">
+                    ₦{formatNaira(product.price, product.isLocal)}
                   </span>
 
-                  <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 hover:bg-black hover:text-white transition">
+                  <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 hover:bg-black hover:text-white transition-colors">
                     <ShoppingCart className="h-4 w-4" />
                   </button>
 

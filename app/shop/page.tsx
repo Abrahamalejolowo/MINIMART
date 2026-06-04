@@ -6,73 +6,23 @@ import { Footer } from '@/components/footer'
 import { ShopFilters } from '@/components/shop-filters'
 import { ProductGrid } from '@/components/product-grid'
 
-// --- TYPES ---
-interface Product {
-  id: string | number
-  title: string
-  price: number
-  image: any 
-  category: string
-  subcategory?: string
-  brand?: string
-  description: string
-  rating: {
-    rate: number
-    count: number
-  }
-}
-
-// --- NIGERIAN PRODUCT DATA ---
-const NIGERIAN_PRODUCTS: Product[] = [
-  {
-    id: 'nerolit-1',
-    title: "Handcrafted Black Leather Sneakers",
-    price: 10000,
-    brand: "Nerolit Handmade",
-    image: "/Sneakers.avif", 
-    category: "footwear",
-    subcategory: "Sneakers",
-    description: "Premium handcrafted black leather sneakers by Nerolit Handmade.",
-    rating: { rate: 4.8, count: 42 }
-  },
-  {
-    id: 'pongo-1',
-    title: "Handcrafted Brown Loafers",
-    price: 18000,
-    brand: "Pongo Bespoke",
-    image: "/BrownLoawers.webp", 
-    category: "footwear",
-    subcategory: "Loafers",
-    description: "Elegant bespoke brown loafers by Pongo Bespoke.",
-    rating: { rate: 4.9, count: 28 }
-  },
-  {
-    id: 'bello-1',
-    title: "Handmade Palm Slippers",
-    price: 7500,
-    brand: "Bello Leather Works",
-    image: "/handmade.jpg", 
-    category: "footwear",
-    subcategory: "Sandals",
-    description: "Quality leather palm slippers by Bello Leather Works.",
-    rating: { rate: 4.6, count: 53 }
-  }
-]
+// IMPORTING FROM YOUR DATABASE FILE
+import { marketplaceDatabase, Product } from '../database/page'
 
 export default function ShopPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   
-  // FILTER STATE
+  // FILTER STATE (Increased upper price range to 100k+ to accommodate luxury items)
   const [filters, setFilters] = useState({
     category: 'all',
     subcategories: [] as string[],
-    priceRange: [0, 100000] as [number, number],
+    priceRange: [0, 200000] as [number, number],
     rating: 0,
   })
 
-  // 1. DATA INITIALIZATION
+  // DATA INITIALIZATION
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -85,10 +35,11 @@ export default function ShopPage() {
           category: p.category.includes("clothing") ? "fashion" : p.category
         }))
 
-        setProducts([...NIGERIAN_PRODUCTS, ...cleanedApiData])
+        // Combining the marketplaceDatabase file data smoothly with global API data
+        setProducts([...marketplaceDatabase, ...cleanedApiData])
       } catch (error) {
         console.error('Error loading products:', error)
-        setProducts(NIGERIAN_PRODUCTS)
+        setProducts(marketplaceDatabase)
       } finally {
         setLoading(false)
       }
@@ -96,7 +47,7 @@ export default function ShopPage() {
     fetchProducts()
   }, [])
 
-  // 2. FILTERING ENGINE
+  // FILTERING ENGINE
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       // Category Match
@@ -104,7 +55,7 @@ export default function ShopPage() {
         return false
       }
 
-      // Subcategory Match (Supports picking one, multiple, or none for "All")
+      // Subcategory Match
       if (filters.subcategories.length > 0) {
         if (!product.subcategory || !filters.subcategories.includes(product.subcategory)) {
           return false
@@ -121,8 +72,12 @@ export default function ShopPage() {
         return false
       }
 
-      // Search Query Match
-      if (searchQuery && !product.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+      // Search Query Match (Supports searching by brand name like 'AW' or product names)
+      const matchesSearch = 
+        product.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        (product.brand && product.brand.toLowerCase().includes(searchQuery.toLowerCase()))
+
+      if (searchQuery && !matchesSearch) {
         return false
       }
 
@@ -146,7 +101,7 @@ export default function ShopPage() {
               Marketplace
             </h1>
             <p className="mt-4 max-w-2xl text-base text-gray-500">
-              Explore the finest Nigerian-made products, from handcrafted footwear to organic skincare.
+              Explore the finest Nigerian-made products, from handcrafted footwear to organic skincare and fine fragrances.
             </p>
           </div>
         </div>

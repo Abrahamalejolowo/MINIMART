@@ -1,16 +1,19 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { ArrowRight, CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import store2 from "../public/Store.avif"
 
 export default function HeroSection() {
+  const router = useRouter()
+
   return (
     <section className="relative w-full bg-background">
       
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:py-16 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:py-10  lg:px-8">
         
         <div className="relative overflow-hidden rounded-3xl">
 
@@ -73,16 +76,18 @@ export default function HeroSection() {
                   transition={{ delay: 0.8 }}
                   className="mt-8 flex flex-col sm:flex-row gap-4"
                 >
-                 <Button
-  onClick={() => {
-    document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" })
-  }}
-  className="bg-green-600 hover:bg-green-700 text-white px-6 py-6 text-base rounded-xl flex items-center gap-2"
->
-  Explore Products <ArrowRight className="h-4 w-4" />
-</Button>
-
                   <Button
+                    onClick={() => {
+                      document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" })
+                    }}
+                    className="bg-green-600 hover:bg-green-700 text-white px-6 py-6 text-base rounded-xl flex items-center gap-2"
+                  >
+                    Explore Products <ArrowRight className="h-4 w-4" />
+                  </Button>
+
+                  {/* FIXED PARTNER BUTTON LINK */}
+                  <Button
+                    onClick={() => router.push('/partner')} 
                     variant="outline"
                     className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-6 py-6 text-base rounded-xl"
                   >
