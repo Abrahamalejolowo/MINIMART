@@ -85,7 +85,7 @@ export function ProductGrid({ products, onAddToCart }: ProductGridProps) {
                   e.preventDefault()
                   onAddToCart(product)
                 }}
-                className="mt-3 w-full gap-2 bg-green text-white hover:bg-green/90"
+                className="mt-3 w-full gap-2 bg-green-600 text-white hover:bg-green-700"
               >
                 <ShoppingCart className="h-4 w-4" />
                 Add to Cart

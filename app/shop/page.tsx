@@ -7,7 +7,7 @@ import { ShopFilters } from '@/components/shop-filters'
 import { ProductGrid } from '@/components/product-grid'
 
 // IMPORTING FROM YOUR DATABASE FILE
-import { marketplaceDatabase, Product } from '../database/page'
+import { marketplaceDatabase, Product } from '@/database/page'
 
 export default function ShopPage() {
   const [products, setProducts] = useState<Product[]>([])

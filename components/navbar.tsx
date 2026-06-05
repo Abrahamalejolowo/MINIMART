@@ -4,16 +4,16 @@ import Link from "next/link";
 import { Search, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-// import min2 from '../public/min2.png'
+import { useRouter } from 'next/navigation' // Correct import path for App Router
 import Image from "next/image";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const router = useRouter(); // Correctly instantiating the router hook inside the component
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
-        {/* Logo */}
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
@@ -25,6 +25,7 @@ export function Navbar() {
             priority
           />
         </Link>
+        
         {/* Desktop Nav Links */}
         <ul className="hidden items-center gap-8 md:flex">
           <li>
@@ -69,9 +70,16 @@ export function Navbar() {
           >
             <Search className="h-5 w-5" />
           </button>
-          <Button size="sm" className="hidden rounded-2 md:inline-flex">
+          
+          <Button
+            onClick={() => router.push('/login')}
+            size="sm" 
+            className="hidden rounded-md md:inline-flex"
+          >
             Login
           </Button>
+          
+          {/* FIXED: Added onClick behavior to trigger the mobile menu display state toggle */}
           <button
             aria-label="Toggle mobile menu"
             className="text-foreground md:hidden"
@@ -88,7 +96,7 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="border-t border-border bg-background px-4 pb-4 md:hidden">
+        <div className="border-t border-border bg-background px-4 pb-4 md:hidden animate-fade-in">
           <ul className="flex flex-col gap-4 pt-4">
             <li>
               <Link
@@ -127,7 +135,15 @@ export function Navbar() {
               </Link>
             </li>
           </ul>
-          <Button size="sm" className="mt-4 w-full rounded-full">
+          
+          <Button 
+            onClick={() => {
+              setMobileOpen(false);
+              router.push('/login');
+            }} 
+            size="sm" 
+            className="mt-4 w-full rounded-md"
+          >
             Login
           </Button>
         </div>

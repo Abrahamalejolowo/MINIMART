@@ -5,7 +5,7 @@ import Image from "next/image"
 import { Heart, ShoppingCart } from "lucide-react"
 
 // IMPORTING FROM YOUR CENTRAL DATABASE FILE
-import { marketplaceDatabase } from "../app/database/page"
+import { marketplaceDatabase } from "../database/page"
 
 interface Product {
   id: string | number
