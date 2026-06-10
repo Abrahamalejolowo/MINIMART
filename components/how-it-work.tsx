@@ -31,7 +31,6 @@ export function HowItWorks() {
         "Your product is delivered through our vendor fulfillment and logistics network.",
     },
   ]
-
   const vendorSteps = [
     {
       number: "1",
@@ -71,7 +70,7 @@ export function HowItWorks() {
 
         {/* HEADER */}
         <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-5xl font-bold text-foreground">
+          <h2 className="text-xl sm:text-4xl font-bold text-foreground">
             How It Works
           </h2>
 
@@ -91,7 +90,7 @@ export function HowItWorks() {
                 For Customers
               </p>
 
-              <h3 className="mt-2 text-2xl font-bold text-foreground">
+              <h3 className="mt-2 text-xl font-bold text-foreground">
                 How It Works
               </h3>
             </div>

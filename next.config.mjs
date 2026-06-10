@@ -1,16 +1,6 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  /* config options here if you need any later */
+};
 
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "fakestoreapi.com",
-      },
-    ],
-  },
-}
-
-export default nextConfig
+export default nextConfig;

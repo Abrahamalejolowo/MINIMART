@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 interface ShopFiltersProps {
   onFilterChange: (filters: {
     category: string
-    subcategories: string[] // Changed to array
+    subcategories: string[] 
     priceRange: [number, number]
     rating: number
   }) => void
@@ -71,9 +71,8 @@ export function ShopFilters({ onFilterChange }: ShopFiltersProps) {
 
   const toggleSubcategory = (subcategory: string) => {
     const newSubcategories = selectedSubcategories.includes(subcategory)
-      ? selectedSubcategories.filter((s) => s !== subcategory) // Remove if exists
-      : [...selectedSubcategories, subcategory] // Add if not exists
-
+      ? selectedSubcategories.filter((s) => s !== subcategory) 
+      : [...selectedSubcategories, subcategory]  
     setSelectedSubcategories(newSubcategories)
 
     onFilterChange({

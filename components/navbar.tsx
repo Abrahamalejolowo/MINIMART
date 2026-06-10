@@ -1,15 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { Search, Menu, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Search, Menu, X, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from 'next/navigation' // Correct import path for App Router
+import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const router = useRouter(); // Correctly instantiating the router hook inside the component
+  const router = useRouter();
+  const pathname = usePathname();
+  const { cart } = useCart();
+
+  // 1. Calculate total items added to the cart by summing up quantities
+  const totalCartItems = (cart || []).reduce((total, item) => total + item.quantity, 0);
+
+  // Centralized Navigation Links
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Shop", href: "/shop" },
+    { name: "Sell", href: "/sell" },
+    { name: "About", href: "/about" },
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background">
@@ -28,61 +42,64 @@ export function Navbar() {
         
         {/* Desktop Nav Links */}
         <ul className="hidden items-center gap-8 md:flex">
-          <li>
-            <Link
-              href="/"
-              className="text-sm font-medium text-green underline underline-offset-4"
-            >
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/shop"
-              className="text-sm font-medium text-foreground transition-colors hover:text-green"
-            >
-              Shop
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/sell"
-              className="text-sm font-medium text-foreground transition-colors hover:text-green"
-            >
-              Sell
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/about"
-              className="text-sm font-medium text-foreground transition-colors hover:text-green"
-            >
-              About
-            </Link>
-          </li>
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className={`text-sm font-medium transition-colors hover:text-green-500 ${
+                    isActive
+                      ? "text-green-500 font-semibold underline underline-offset-4"
+                      : "text-foreground"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
-        {/* Right Side */}
-        <div className="flex items-center gap-3">
+        {/* Right Side Icons & Actions */}
+        <div className="flex items-center gap-4">
           <button
             aria-label="Search"
-            className="text-foreground transition-colors hover:text-green"
+            className="text-foreground transition-colors hover:text-green-500"
           >
             <Search className="h-5 w-5" />
           </button>
+
+          {/* Desktop Cart Icon with Dynamic Counter Badge */}
+          <Link
+            href="/cart"
+            aria-label="Shopping Cart"
+            className={`relative transition-colors hover:text-green-500 flex items-center justify-center p-2 group ${
+              pathname === "/cart" ? "text-green-500" : "text-foreground"
+            }`}
+          >
+            <ShoppingBag className="h-5 w-5" />
+            
+            {/* 2. Visual Badge Indicator displaying many items are inside */}
+            {totalCartItems > 0 && (
+              <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-[10px] font-bold text-white ring-2 ring-background animate-in zoom-in-50">
+                {totalCartItems}
+              </span>
+            )}
+          </Link>
           
           <Button
             onClick={() => router.push('/login')}
             size="sm" 
-            className="hidden rounded-md md:inline-flex"
+            className="hidden bg-green-500 text-white hover:bg-green-600 rounded-xl px-5 md:inline-flex"
           >
             Login
           </Button>
           
-          {/* FIXED: Added onClick behavior to trigger the mobile menu display state toggle */}
+          {/* Mobile Layout Menu Button */}
           <button
             aria-label="Toggle mobile menu"
-            className="text-foreground md:hidden"
+            className="text-foreground md:hidden transition-colors hover:text-green-500"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? (
@@ -94,44 +111,45 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Dropdown */}
       {mobileOpen && (
-        <div className="border-t border-border bg-background px-4 pb-4 md:hidden animate-fade-in">
+        <div className="border-t border-border bg-background px-4 pb-6 md:hidden">
           <ul className="flex flex-col gap-4 pt-4">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className={`text-sm block py-1 transition-colors ${
+                      isActive ? "font-bold text-green-500" : "font-medium text-foreground"
+                    }`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              );
+            })}
+            
+            {/* Mobile Layout Cart Row with direct counter value */}
             <li>
               <Link
-                href="/"
-                className="text-sm font-medium text-green"
+                href="/cart"
+                className={`text-sm font-medium flex items-center justify-between py-1 ${
+                  pathname === "/cart" ? "text-green-500 font-bold" : "text-foreground"
+                }`}
                 onClick={() => setMobileOpen(false)}
               >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/shop"
-                className="text-sm font-medium text-foreground"
-                onClick={() => setMobileOpen(false)}
-              >
-                Shop
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/sell"
-                className="text-sm font-medium text-foreground"
-                onClick={() => setMobileOpen(false)}
-              >
-                Sell
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/about"
-                className="text-sm font-medium text-foreground"
-                onClick={() => setMobileOpen(false)}
-              >
-                About
+                <div className="flex items-center gap-2">
+                  <ShoppingBag className="h-4 w-4" />
+                  <span>Cart</span>
+                </div>
+                {totalCartItems > 0 && (
+                  <span className="rounded-full bg-green-500 px-2 py-0.5 text-xs font-bold text-white">
+                    {totalCartItems} items
+                  </span>
+                )}
               </Link>
             </li>
           </ul>
@@ -142,7 +160,7 @@ export function Navbar() {
               router.push('/login');
             }} 
             size="sm" 
-            className="mt-4 w-full rounded-md"
+            className="mt-5 w-full bg-green-500 text-white hover:bg-green-600 rounded-xl py-5 font-semibold"
           >
             Login
           </Button>

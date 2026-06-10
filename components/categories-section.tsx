@@ -10,9 +10,17 @@ import Home from "../public/Home.webp"
 import Artisan from "../public/Artisan.webp"
 import Beauty from "../public/Beauty.webp"
 import leather from "../public/leather.avif"
+import LUBNA from "../public/LUBNA.jpeg"
 
 
 const categories = [
+  {
+    title: "Perfumes FROM SCENTS BY AW",  
+    description: "GIGS, GIGS 2.0, LUBNA and LUBNA 2.0 ",
+    image: LUBNA ,
+    href: "/shop?category=perfumes",
+    cta: "Explore Perfumes",
+  },
   {
     title: "Footwear",
     description: "Sneakers, sandals, loafers and handmade footwear",

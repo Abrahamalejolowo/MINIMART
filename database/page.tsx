@@ -1,5 +1,3 @@
-// app/database/products.ts
-
 export interface Product {
   id: string | number
   title: string
@@ -16,48 +14,13 @@ export interface Product {
 }
 
 export const marketplaceDatabase: Product[] = [
-  // --- FOOTWEAR DATA ---
-  {
-    id: 'nerolit-1',
-    title: "Handcrafted Black Leather Sneakers",
-    price: 10000,
-    brand: "Nerolit Handmade",
-    image: "/Sneakers.avif", 
-    category: "footwear",
-    subcategory: "Sneakers",
-    description: "Premium handcrafted black leather sneakers by Nerolit Handmade.",
-    rating: { rate: 4.8, count: 42 }
-  },
-  {
-    id: 'pongo-1',
-    title: "Handcrafted Brown Loafers",
-    price: 18000,
-    brand: "Pongo Bespoke",
-    image: "/BrownLoawers.webp", 
-    category: "footwear",
-    subcategory: "Loafers",
-    description: "Elegant bespoke brown loafers by Pongo Bespoke.",
-    rating: { rate: 4.9, count: 28 }
-  },
-  {
-    id: 'bello-1',
-    title: "Handmade Palm Slippers",
-    price: 7500,
-    brand: "Bello Leather Works",
-    image: "/handmade.jpg", 
-    category: "footwear",
-    subcategory: "Sandals",
-    description: "Quality leather palm slippers by Bello Leather Works.",
-    rating: { rate: 4.6, count: 53 }
-  },
-
   // --- SCENTS BY AW PREMIUM FRAGRANCES ---
   {
     id: 'saw-gigs-1',
     title: "GIGS (100ML)",
     price: 80000,
     brand: "SCENTS BY AW",
-    image: "/GIGS.jpeg", // Make sure to save your image file in public/gigs.jpg
+    image: "/GIGS.jpeg", 
     category: "beauty",
     subcategory: "Perfumes",
     description: "Four fragrances composed for curious minds—and noses—reveal their stories via scent.",
@@ -68,7 +31,7 @@ export const marketplaceDatabase: Product[] = [
     title: "GIGS 2.0 (100ML)",
     price: 80000,
     brand: "SCENTS BY AW",
-    image: "/GIGS2.0.jpeg", // Save your image in public/gigs2.jpg
+    image: "/GIGS2.0.jpeg",
     category: "beauty",
     subcategory: "Perfumes",
     description: "Four fragrances composed for curious minds—and noses—reveal their stories via scent.",
@@ -79,7 +42,7 @@ export const marketplaceDatabase: Product[] = [
     title: "LUBNA (100ML)",
     price: 80000,
     brand: "SCENTS BY AW",
-    image: "/lubna.jpeg", // Save your image in public/lubna.jpg
+    image: "/lubna.jpeg",
     category: "beauty",
     subcategory: "Perfumes",
     description: "Four fragrances composed for curious minds—and noses—reveal their stories via scent.",
@@ -90,7 +53,7 @@ export const marketplaceDatabase: Product[] = [
     title: "LUBNA 2.0 (100ML)",
     price: 80000,
     brand: "SCENTS BY AW",
-    image: "/lubna2.0.jpeg", // Save your image in public/lubna2.jpg
+    image: "/lubna2.0.jpeg", 
     category: "beauty",
     subcategory: "Perfumes",
     description: "Four fragrances composed for curious minds—and noses—reveal their stories via scent.",
