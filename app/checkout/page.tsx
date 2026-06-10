@@ -5,7 +5,7 @@ import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { Button } from '@/components/ui/button'
 import { useCart } from '@/context/CartContext'
-import { Check, Truck, Lock } from 'lucide-react'
+import { Check, Lock } from 'lucide-react'
 
 type StepType = 'shipping' | 'payment' | 'confirmation'
 
@@ -13,8 +13,8 @@ export default function CheckoutPage() {
   const [currentStep, setCurrentStep] = useState<StepType>('shipping')
   const [isProcessing, setIsProcessing] = useState(false)
   
-  // Hook directly into your global cart state
-  const { cart, clearCart } = useCart()
+  // FIXED: Hooked into cartItems from global context and safely aliased it to 'cart'
+  const { cartItems: cart = [], clearCart } = useCart()
 
   const [shippingData, setShippingData] = useState({
     firstName: '',
@@ -36,9 +36,9 @@ export default function CheckoutPage() {
   })
 
   // Dynamic calculations utilizing your real cart state
- const subtotal = useMemo(() => {
-    // Add (cart || []) fallback to prevent breaking if context isn't fully loaded
-    return (cart || []).reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const subtotal = useMemo(() => {
+    const list = cart || []
+    return list.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0)
   }, [cart])
 
   const shippingCost = shippingData.shippingMethod === 'express' ? 3000 : 1000
@@ -196,7 +196,7 @@ export default function CheckoutPage() {
                           autoComplete="given-name"
                           value={shippingData.firstName}
                           onChange={(e) => handleShippingChange('firstName', e.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                           required
                         />
                       </div>
@@ -209,7 +209,7 @@ export default function CheckoutPage() {
                           autoComplete="family-name"
                           value={shippingData.lastName}
                           onChange={(e) => handleShippingChange('lastName', e.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                           required
                         />
                       </div>
@@ -224,7 +224,7 @@ export default function CheckoutPage() {
                         autoComplete="email"
                         value={shippingData.email}
                         onChange={(e) => handleShippingChange('email', e.target.value)}
-                        className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                        className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                         required
                       />
                     </div>
@@ -238,7 +238,7 @@ export default function CheckoutPage() {
                         autoComplete="tel"
                         value={shippingData.phone}
                         onChange={(e) => handleShippingChange('phone', e.target.value)}
-                        className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                        className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                         required
                       />
                     </div>
@@ -252,7 +252,7 @@ export default function CheckoutPage() {
                         autoComplete="street-address"
                         value={shippingData.address}
                         onChange={(e) => handleShippingChange('address', e.target.value)}
-                        className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                        className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                         required
                       />
                     </div>
@@ -266,7 +266,7 @@ export default function CheckoutPage() {
                           type="text"
                           value={shippingData.city}
                           onChange={(e) => handleShippingChange('city', e.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                           required
                         />
                       </div>
@@ -278,7 +278,7 @@ export default function CheckoutPage() {
                           type="text"
                           value={shippingData.state}
                           onChange={(e) => handleShippingChange('state', e.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                           required
                         />
                       </div>
@@ -291,7 +291,7 @@ export default function CheckoutPage() {
                           autoComplete="postal-code"
                           value={shippingData.zip}
                           onChange={(e) => handleShippingChange('zip', e.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                           required
                         />
                       </div>
@@ -372,7 +372,7 @@ export default function CheckoutPage() {
                         value={paymentData.cardNumber}
                         onChange={(e) => handlePaymentChange('cardNumber', e.target.value)}
                         placeholder="1234 5678 9012 3456"
-                        className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                        className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                         required
                       />
                     </div>
@@ -387,7 +387,7 @@ export default function CheckoutPage() {
                         value={paymentData.cardHolder}
                         onChange={(e) => handlePaymentChange('cardHolder', e.target.value)}
                         placeholder="John Doe"
-                        className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                        className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                         required
                       />
                     </div>
@@ -403,7 +403,7 @@ export default function CheckoutPage() {
                           placeholder="MM/YY"
                           value={paymentData.expiryDate}
                           onChange={(e) => handlePaymentChange('expiryDate', e.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                           required
                         />
                       </div>
@@ -418,7 +418,7 @@ export default function CheckoutPage() {
                           placeholder="•••"
                           value={paymentData.cvv}
                           onChange={(e) => handlePaymentChange('cvv', e.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10"
+                          className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-500/10 text-gray-900"
                           required
                         />
                       </div>
@@ -494,23 +494,22 @@ export default function CheckoutPage() {
                 </h3>
 
                 {/* Items */}
-              {/* Items */}
-<div className="space-y-4 border-b border-gray-200 pb-4 max-h-[320px] overflow-y-auto pr-1">
-  {(!cart || cart.length === 0) && currentStep !== 'confirmation' ? (
-    <p className="text-sm text-gray-400 py-2">Your shopping basket is empty</p>
-  ) : (
-    (cart || []).map((item) => (
-      <div key={item.id} className="flex justify-between text-sm items-start gap-4">
-        <span className="text-gray-600 font-light">
-          {item.name} <span className="text-gray-400 font-normal">x{item.quantity}</span>
-        </span>
-        <span className="font-medium text-gray-900 shrink-0">
-          ₦{(item.price * item.quantity).toLocaleString()}
-        </span>
-      </div>
-    ))
-  )}
-</div>
+                <div className="space-y-4 border-b border-gray-200 pb-4 max-h-[320px] overflow-y-auto pr-1">
+                  {(!cart || cart.length === 0) && currentStep !== 'confirmation' ? (
+                    <p className="text-sm text-gray-400 py-2">Your shopping basket is empty</p>
+                  ) : (
+                    (cart || []).map((item) => (
+                      <div key={item.id} className="flex justify-between text-sm items-start gap-4">
+                        <span className="text-gray-600 font-light">
+                          {item.name} <span className="text-gray-400 font-normal">x{item.quantity || 1}</span>
+                        </span>
+                        <span className="font-medium text-gray-900 shrink-0">
+                          ₦{((item.price || 0) * (item.quantity || 1)).toLocaleString()}
+                        </span>
+                      </div>
+                    ))
+                  )}
+                </div>
 
                 {/* Totals */}
                 <div className="mt-4 space-y-2.5">
