@@ -51,19 +51,20 @@ export function Footer() {
     <footer className="bg-foreground text-background">
       <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
         <div className="grid gap-10 md:grid-cols-5">
-          {/* BRAND */}
+          
+          {/* BRAND SECTION */}
           <div className="md:col-span-2">
             <Link href="/" className="flex items-center">
-  <div className="relative h-10 w-32 sm:h-10 sm:w-36 rounded-md bg-white p-1">
-    <Image
-      src="/SENT.png"
-      alt="Minmart Logo"
-      fill
-      priority
-      className="object-contain"
-    />
-  </div>
-</Link>
+              <div className="relative h-10 w-32 sm:h-10 sm:w-36 rounded-md bg-white p-1">
+                <Image
+                  src="/SENT.png"
+                  alt="Minmart Logo"
+                  fill
+                  priority
+                  className="object-contain"
+                />
+              </div>
+            </Link>
 
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-background/70">
               Minmart is Nigeria&apos;s curated marketplace for authentic local
@@ -90,7 +91,7 @@ export function Footer() {
             </div>
           </div>
 
-          {/* FOOTER LINKS */}
+          {/* DYNAMIC FOOTER LINKS */}
           {Object.entries(footerLinks).map(([heading, links]) => (
             <div key={heading}>
               <h4 className="mb-4 text-xs font-semibold uppercase tracking-widest text-background/50">

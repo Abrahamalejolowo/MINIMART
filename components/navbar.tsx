@@ -12,10 +12,12 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  const { cart } = useCart();
+  
+  // FIXED: Destructured cartItems and safely aliased it to 'cart' to match your Context API
+  const { cartItems: cart = [] } = useCart();
 
   // 1. Calculate total items added to the cart by summing up quantities
-  const totalCartItems = (cart || []).reduce((total, item) => total + item.quantity, 0);
+  const totalCartItems = (cart || []).reduce((total, item) => total + (item.quantity || 1), 0);
 
   // Centralized Navigation Links
   const navLinks = [

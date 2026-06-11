@@ -23,7 +23,7 @@ export function ProductCard({ id, name, price, image }: ProductProps) {
       name,
       price,
       image,
-      quantity: 1,
+    //   quantity: 1,
     })
   }
 

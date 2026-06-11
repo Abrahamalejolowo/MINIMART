@@ -22,8 +22,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased`}>
-        <CartProvider>
+      <body className={`${inter.variable} font-sans antialiased`} suppressHydrationWarning>
+        <CartProvider>          
           {children}
         </CartProvider>
       </body>

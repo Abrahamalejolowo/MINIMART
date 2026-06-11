@@ -267,7 +267,7 @@ export default function SignupPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-green text-white hover:bg-green/90 py-6 text-sm font-semibold rounded-xl shadow-lg shadow-green/10 transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-green-500 text-white hover:bg-green-600 py-6 text-sm font-semibold rounded-xl shadow-lg shadow-green-500/10 transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -317,7 +317,7 @@ export default function SignupPage() {
               Already have an account?{' '}
               <Link
                 href="/login"
-                className="font-semibold text-green hover:text-green-600 transition-colors underline underline-offset-4 decoration-green/20"
+                className="font-semibold text-green-500 hover:text-green-600 transition-colors underline underline-offset-4 decoration-green/20"
               >
                 Sign In
               </Link>
