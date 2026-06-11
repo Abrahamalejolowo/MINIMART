@@ -103,20 +103,19 @@ export default function ShopPage() {
                 </div>
               ) : (
                 <ProductGrid
-                  products={filteredProducts.map((p) => ({
-                    id: String(p.id),
-                    name: p.title,
-                    price: p.price,
-                    image: p.image,
-                    category: p.category,
-                    rating: p.rating.rate,
-                    reviews: p.rating.count,
-                    rawProduct: p 
-                  }))}
-                  onAddToCart={(item: any) => handleAddToCart(item.rawProduct)}
-                  // Pass the click handler into the product grid so clicking elements triggers the popup
-                  onProductClick={(item: any) => setSelectedProduct(item.rawProduct)}
-                />
+  products={filteredProducts.map((p) => ({
+    id: String(p.id),
+    name: p.title,
+    price: p.price,
+    image: p.image,
+    category: p.category,
+    rating: p.rating.rate,
+    reviews: p.rating.count,
+    rawProduct: p 
+  }))}
+  onAddToCart={(item: any) => handleAddToCart(item.rawProduct)}
+
+/>
               )}
             </section>
           </div>
