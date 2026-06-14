@@ -5,7 +5,7 @@ import HeroSection from "@/components/hero-section"
 import { IntroSection } from "@/components/intro-section"
 import { CategoriesSection } from "@/components/categories-section"
 import { LatestArrivalsSection } from "@/components/latest-arrivals-section"
-import { HowItWorks } from "@/components/how-it-work"
+// import { HowItWorks } from "@/components/how-it-work"
 import { TrustBadgesSection } from "@/components/trust-badges-section"
 import { SellerCtaSection } from "@/components/seller-cta-section"
 import { Footer } from "@/components/footer"
@@ -17,23 +17,14 @@ export default function Page() {
       <Navbar />
       
       <main className="flex-1 space-y-4 sm:space-y-0">
-        {/* Top-of-page sections load instantly for better performance and SEO */}
         <HeroSection />
         <IntroSection />
-        
-        {/* Elements below the fold dynamically slide and fade into view */}
         <ScrollReveal>
           <CategoriesSection />
         </ScrollReveal>
-
         <ScrollReveal>
           <LatestArrivalsSection />
         </ScrollReveal>
-
-        <ScrollReveal>
-          <HowItWorks />
-        </ScrollReveal>
-
         <ScrollReveal>
           <TrustBadgesSection />
         </ScrollReveal>

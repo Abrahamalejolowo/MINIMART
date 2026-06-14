@@ -2,71 +2,61 @@
 
 import Image from "next/image"
 import Link from "next/link"  
-// import shoe1 from "../public/shoe1.webp"
-import Shore3 from "../public/Store3.webp"
-import Store5 from "../public/store5.webp"
-import footwear from "../public/shoe2.webp"
-import Home from "../public/Home.webp"
-import Artisan from "../public/Artisan.webp"
-import Beauty from "../public/Beauty.webp"
-import leather from "../public/leather.avif"
-import LUBNA from "../public/LUBNA.jpeg"
-
 
 const categories = [
   {
     title: "Perfumes FROM SCENTS BY AW",  
-    description: "GIGS, GIGS 2.0, LUBNA and LUBNA 2.0 ",
-    image: LUBNA ,
+    description: "GIGS, GIGS 2.0, LUBNA and LUBNA 2.0",
+    image: "/LUBNA.jpeg",
     href: "/shop?category=perfumes",
     cta: "Explore Perfumes",
   },
   {
     title: "Footwear",
     description: "Sneakers, sandals, loafers and handmade footwear",
-    image: footwear,
+    image: "/shoe2.webp", 
     href: "/shop?category=footwear",
     cta: "Explore Footwear",
   },
   {
-    title: "Fashion",
-    description: "Modern Nigerian fashion and cultural styles",
-    image: Store5,
+    title: "Zino Cartel",
+    description: "Premium bags, embroidered shirts, and utility trousers born from resilience and underground culture.",
+    image: "/ZinoShirt4.JPG",
     href: "/shop?category=fashion",
-    cta: "Explore Fashion",
+    cta: "Explore The Cartel",
   },
   {
     title: "Leather Goods",
     description: "Premium bags, wallets, belts, and artisan accessories",
-    image: leather,
+    image: "/leather.avif", 
     href: "/shop?category=leather",
     cta: "Explore Leather",
   },
   {
     title: "Home & Living",
     description: "Handmade decor, candles, and artisan kitchenware",
-    image: Home, 
+    image: "/Home.webp", 
     href: "/shop?category=home",
     cta: "Explore Home",
   },
   {
     title: "Beauty & Skincare",
     description: "Organic skincare and beauty essentials",
-    image: Beauty,
+    image: "/Beauty.webp",
     href: "/shop?category=beauty",
     cta: "Explore Beauty",
   },
   {
     title: "Food & Spices",
     description: "Authentic spices, snacks and packaged foods",
-    image: Shore3,
+    image: "/Store3.webp",
     href: "/shop?category=food",
     cta: "Explore Food",
   },
   {
     title: "Crafts & Artisanal",
     description: "Woven items, cultural pieces and handmade creative crafts",
-    image: Artisan,
+    image: "/Artisan.webp",
     href: "/shop?category=crafts",
     cta: "Explore Crafts",
   },

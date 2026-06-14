@@ -2,6 +2,7 @@ import Image from "next/image"
 import { CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import softwareDev from "../public/software dev.jpeg"
+import { useRouter } from 'next/navigation'
 
 const benefits = [
   "Zero initial listing fees",
@@ -10,6 +11,7 @@ const benefits = [
 ]
 
 export function SellerCtaSection() {
+  const router = useRouter()
   return (
     <section className="bg-secondary/30 py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
@@ -31,7 +33,9 @@ export function SellerCtaSection() {
                   </li>
                 ))}
               </ul>
-              <Button size="lg" className="mt-8 rounded-2">
+              <Button
+              onClick={() => router.push('/partner')} 
+               size="lg" className="mt-8 rounded-2">
                 Express Interest
               </Button>
             </div>

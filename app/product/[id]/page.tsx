@@ -5,7 +5,7 @@ import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ShoppingBag, Check, Building2, Phone, MapPin, MessageSquare, Star, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Check, Building2, Mail, MapPin, MessageSquare, Star, ShieldCheck } from "lucide-react";
 import { marketplaceDatabase } from '@/database/page';
 import { Navbar } from "@/components/navbar";
 
@@ -36,6 +36,12 @@ export default function ProductDetailPage({ params }: PageProps) {
       </div>
     );
   }
+
+  // Dynamic fallback variables derived from business context values
+  const brandName = product.brand || "SCENTS BY AW";
+  const contactEmail = brandName.toLowerCase().includes("zino") 
+    ? "Zinocartelclothing@gmail.com" 
+    : "scentsbyaw@gmail.com";
 
   const handleAddToCart = () => {
     addToCart({
@@ -141,34 +147,36 @@ export default function ProductDetailPage({ params }: PageProps) {
                   </div>
                   <div>
                     <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none">Manufacturer / Brand</p>
-                    <p className="font-bold text-gray-900 mt-1 text-sm">{product.brand || "Scents by AW"}</p>
+                    <p className="font-bold text-gray-900 mt-1 text-sm">{brandName}</p>
                   </div>
                 </div>
 
-                {/* Contact Info Item */}
+                {/* Swapped Contact Info Item (Direct Desk Line -> Mail) */}
                 <div className="flex items-center gap-4 p-3 rounded-xl bg-white border border-gray-100 transition-hover hover:border-gray-200 shadow-2xs">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                    <Phone className="h-5 w-5" />
+                    <Mail className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none">Direct Desk Line</p>
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none">Official Merchant Mail</p>
                     <a 
-                      href="tel:+2348000000000" 
-                      className="font-bold text-gray-900 hover:text-green-600 text-sm transition-colors mt-1 block"
+                      href={`mailto:${contactEmail}`} 
+                      className="font-bold text-gray-900 hover:text-green-600 text-sm transition-colors mt-1 block break-all"
                     >
-                      +234 800 000 0000
+                      {contactEmail}
                     </a>
                   </div>
                 </div>
 
-                {/* Logistics Hub Item */}
+                {/* Logistics Hub Item - Now using dynamic product location mappings */}
                 <div className="flex items-center gap-4 p-3 rounded-xl bg-white border border-gray-100 transition-hover hover:border-gray-200 shadow-2xs">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
                     <MapPin className="h-5 w-5" />
                   </div>
                   <div>
                     <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none">Distribution Hub</p>
-                    <p className="font-bold text-gray-900 mt-1 text-sm">Lagos, Nigeria</p>
+                    <p className="font-bold text-gray-900 mt-1 text-sm">
+                      {(product as any).location || "Lagos, Nigeria"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -197,16 +205,6 @@ export default function ProductDetailPage({ params }: PageProps) {
                   </>
                 )}
               </Button>
-
-              <a
-                href="https://wa.me/2348000000000"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full rounded-2xl text-xs font-black py-4 border border-gray-200 text-gray-700 bg-white hover:bg-gray-50 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-xs"
-              >
-                <MessageSquare className="h-4 w-4 text-green-500 fill-green-500/10" />
-                Inquire via Active WhatsApp
-              </a>
             </div>
 
           </div>

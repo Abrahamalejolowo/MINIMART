@@ -23,7 +23,8 @@ const categories = [
   {
     id: 'fashion',
     name: 'Fashion',
-    subcategories: ['Ready-to-Wear', 'Streetwear', 'Womenswear', 'Menswear', 'Native Wear'],
+    // 👈 Added 'Bags', 'Shirts', and 'Trousers' to match your new Zino Cartel product items
+    subcategories: ['Ready-to-Wear', 'Streetwear', 'Shirts', 'Trousers', 'Bags', 'Womenswear', 'Menswear', 'Native Wear'],
   },
   {
     id: 'beauty',

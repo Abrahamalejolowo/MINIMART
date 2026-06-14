@@ -27,12 +27,12 @@ function formatNaira(amount: number, isLocal?: boolean) {
 export function LatestArrivalsSection() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
-  const router = useRouter() // Initialized router
+  const router = useRouter() 
   
-  // Track currently selected product for the popup modal view
+
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   
-  // Grab the safe global addToCart action
+
   const { addToCart } = useCart()
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export function LatestArrivalsSection() {
   }
 
   return (
-    <section className="bg-secondary/30 py-12 md:py-20">
+    <section className="bg-white py-6 md:py-10">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         {/* HEADER */}
         <div className="text-center">
@@ -154,7 +154,7 @@ export function LatestArrivalsSection() {
                         image: product.image
                       });
                     }}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 hover:bg-green-600 hover:text-white transition-colors"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg  hover:bg-green-600 hover:text-white transition-colors"
                   >
                     <ShoppingCart className="h-4 w-4" />
                   </button>

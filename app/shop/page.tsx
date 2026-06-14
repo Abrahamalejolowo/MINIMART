@@ -1,69 +1,84 @@
-'use client'
+"use client";
 
-import { useState, useMemo, useEffect } from 'react'
-import { Navbar } from '@/components/navbar'
-import { Footer } from '@/components/footer'
-import { ShopFilters } from '@/components/shop-filters'
-import { ProductGrid } from '@/components/product-grid'
-import { useCart } from '@/context/CartContext' 
-import { marketplaceDatabase, type Product } from '@/database/page'
-import Image from 'next/image'
-import { ShoppingCart, Heart, X, Star } from 'lucide-react'
+import { useState, useMemo, useEffect } from "react";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import { ShopFilters } from "@/components/shop-filters";
+import { ProductGrid } from "@/components/product-grid";
+import { useCart } from "@/context/CartContext";
+import { marketplaceDatabase, type Product } from "@/database/page";
+import Image from "next/image";
+import { ShoppingCart, Heart, X, Star } from "lucide-react";
 
 export default function ShopPage() {
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchQuery, setSearchQuery] = useState('')
-  
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Track currently selected product for the popup modal view
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
-  
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
   // INITIALIZE THE ADD TO CART FUNCTION
-  const { addToCart } = useCart()
+  const { addToCart } = useCart();
 
   const [filters, setFilters] = useState({
-    category: 'all',
+    category: "all",
     subcategories: [] as string[],
     priceRange: [0, 200000] as [number, number],
     rating: 0,
-  })
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setProducts([...marketplaceDatabase])
+        setProducts([...marketplaceDatabase]);
       } catch (error) {
-        setProducts(marketplaceDatabase)
+        setProducts(marketplaceDatabase);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    fetchProducts()
-  }, [])
+    };
+    fetchProducts();
+  }, []);
 
   const handleAddToCart = (p: any) => {
     addToCart({
       id: String(p.id),
-      name: p.title || p.name, 
+      name: p.title || p.name,
       price: p.price,
-      image: p.image
-    })
-  }
+      image: p.image,
+    });
+  };
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
-      if (filters.category !== 'all' && product.category.toLowerCase() !== filters.category.toLowerCase()) return false
-      if (filters.subcategories.length > 0 && (!product.subcategory || !filters.subcategories.includes(product.subcategory))) return false
-      if (product.price < filters.priceRange[0] || product.price > filters.priceRange[1]) return false
-      if (filters.rating > 0 && product.rating.rate < filters.rating) return false
-      
-      const matchesSearch = 
-        product.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        (product.brand && product.brand.toLowerCase().includes(searchQuery.toLowerCase()))
+      if (
+        filters.category !== "all" &&
+        product.category.toLowerCase() !== filters.category.toLowerCase()
+      )
+        return false;
+      if (
+        filters.subcategories.length > 0 &&
+        (!product.subcategory ||
+          !filters.subcategories.includes(product.subcategory))
+      )
+        return false;
+      if (
+        product.price < filters.priceRange[0] ||
+        product.price > filters.priceRange[1]
+      )
+        return false;
+      if (filters.rating > 0 && product.rating.rate < filters.rating)
+        return false;
 
-      return !searchQuery || matchesSearch
-    })
-  }, [products, filters, searchQuery])
+      const matchesSearch =
+        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (product.brand &&
+          product.brand.toLowerCase().includes(searchQuery.toLowerCase()));
+
+      return !searchQuery || matchesSearch;
+    });
+  }, [products, filters, searchQuery]);
 
   return (
     <div className="flex min-h-screen flex-col bg-[#F9FAFB]">
@@ -84,7 +99,9 @@ export default function ShopPage() {
           <div className="grid gap-10 lg:grid-cols-4">
             <aside className="lg:col-span-1">
               <div className="sticky top-24">
-                <ShopFilters onFilterChange={(newFilters: any) => setFilters(newFilters)} />
+                <ShopFilters
+                  onFilterChange={(newFilters: any) => setFilters(newFilters)}
+                />
               </div>
             </aside>
 
@@ -103,19 +120,18 @@ export default function ShopPage() {
                 </div>
               ) : (
                 <ProductGrid
-  products={filteredProducts.map((p) => ({
-    id: String(p.id),
-    name: p.title,
-    price: p.price,
-    image: p.image,
-    category: p.category,
-    rating: p.rating.rate,
-    reviews: p.rating.count,
-    rawProduct: p 
-  }))}
-  onAddToCart={(item: any) => handleAddToCart(item.rawProduct)}
-
-/>
+                  products={filteredProducts.map((p) => ({
+                    id: String(p.id),
+                    name: p.title,
+                    price: p.price,
+                    image: p.image,
+                    category: p.category,
+                    rating: p.rating.rate,
+                    reviews: p.rating.count,
+                    rawProduct: p,
+                  }))}
+                  onAddToCart={(item: any) => handleAddToCart(item.rawProduct)}
+                />
               )}
             </section>
           </div>
@@ -125,16 +141,16 @@ export default function ShopPage() {
 
       {/* QUICK VIEW POPUP MODAL */}
       {selectedProduct && (
-        <div 
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-200"
           onClick={() => setSelectedProduct(null)}
         >
-          <div 
+          <div
             className="relative w-full max-w-2xl overflow-hidden rounded-3xl bg-white p-6 shadow-xl transition-all md:p-8 animate-in zoom-in-95 duration-200 grid md:grid-cols-2 gap-6"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside content box
           >
             {/* CLOSE BUTTON */}
-            <button 
+            <button
               onClick={() => setSelectedProduct(null)}
               className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors"
             >
@@ -157,7 +173,7 @@ export default function ShopPage() {
                 <span className="text-xs uppercase tracking-wider text-green-600 font-extrabold">
                   {selectedProduct.category}
                 </span>
-                
+
                 <h3 className="mt-2 text-xl font-bold text-gray-900 leading-tight">
                   {selectedProduct.title}
                 </h3>
@@ -168,26 +184,34 @@ export default function ShopPage() {
                     <div className="flex items-center text-amber-500">
                       <Star className="h-3.5 w-3.5 fill-current" />
                     </div>
-                    <span className="text-xs font-bold text-gray-700">{selectedProduct.rating.rate}</span>
-                    <span className="text-xs text-gray-400">({selectedProduct.rating.count} reviews)</span>
+                    <span className="text-xs font-bold text-gray-700">
+                      {selectedProduct.rating.rate}
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      ({selectedProduct.rating.count} reviews)
+                    </span>
                   </div>
                 )}
 
                 <p className="mt-3 text-2xl font-black text-gray-900">
-                  ₦{new Intl.NumberFormat("en-NG").format(selectedProduct.price)}
+                  ₦
+                  {new Intl.NumberFormat("en-NG").format(selectedProduct.price)}
                 </p>
-                
+
                 <hr className="my-4 border-gray-100" />
-                
-                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">Description</h4>
+
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                  Description
+                </h4>
                 <p className="mt-1 text-sm text-gray-500 leading-relaxed max-h-[140px] overflow-y-auto">
-                  {selectedProduct.description || "Premium authentic quality item curated directly from talented local creators and top marketplace listings on Minmart platforms."}
+                  {selectedProduct.description ||
+                    "Premium authentic quality item curated directly from talented local creators and top marketplace listings on Minmart platforms."}
                 </p>
               </div>
 
               {/* ACTIONS */}
               <div className="mt-6 flex gap-3">
-                <button 
+                <button
                   onClick={() => {
                     handleAddToCart(selectedProduct);
                     setSelectedProduct(null); // Optional: closes pop up after addition
@@ -205,5 +229,5 @@ export default function ShopPage() {
         </div>
       )}
     </div>
-  )
+  );
 }
