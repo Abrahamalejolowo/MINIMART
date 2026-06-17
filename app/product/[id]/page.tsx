@@ -5,7 +5,7 @@ import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ShoppingBag, Check, Building2, Mail, MapPin, MessageSquare, Star, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Check, Building2, MapPin, MessageSquare, Star, ShieldCheck } from "lucide-react";
 import { marketplaceDatabase } from '@/database/page';
 import { Navbar } from "@/components/navbar";
 
@@ -39,9 +39,6 @@ export default function ProductDetailPage({ params }: PageProps) {
 
   // Dynamic fallback variables derived from business context values
   const brandName = product.brand || "SCENTS BY AW";
-  const contactEmail = brandName.toLowerCase().includes("zino") 
-    ? "Zinocartelclothing@gmail.com" 
-    : "scentsbyaw@gmail.com";
 
   const handleAddToCart = () => {
     addToCart({
@@ -151,23 +148,20 @@ export default function ProductDetailPage({ params }: PageProps) {
                   </div>
                 </div>
 
-                {/* Swapped Contact Info Item (Direct Desk Line -> Mail) */}
+                {/* Swapped Mail out for Merchant Live Support */}
                 <div className="flex items-center gap-4 p-3 rounded-xl bg-white border border-gray-100 transition-hover hover:border-gray-200 shadow-2xs">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                    <Mail className="h-5 w-5" />
+                    <MessageSquare className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none">Official Merchant Mail</p>
-                    <a 
-                      href={`mailto:${contactEmail}`} 
-                      className="font-bold text-gray-900 hover:text-green-600 text-sm transition-colors mt-1 block break-all"
-                    >
-                      {contactEmail}
-                    </a>
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none">Merchant Live Chat</p>
+                    <p className="font-bold text-gray-900 text-sm mt-1">
+                      Available via Minimart Desk
+                    </p>
                   </div>
                 </div>
 
-                {/* Logistics Hub Item - Now using dynamic product location mappings */}
+                {/* Logistics Hub Item */}
                 <div className="flex items-center gap-4 p-3 rounded-xl bg-white border border-gray-100 transition-hover hover:border-gray-200 shadow-2xs">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
                     <MapPin className="h-5 w-5" />

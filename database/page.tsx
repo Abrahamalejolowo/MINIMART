@@ -25,7 +25,7 @@ export const marketplaceDatabase: Product[] = [
     image: "/GIGS.jpeg", 
     category: "beauty",
     subcategory: "Perfumes",
-    location: "Abuja, Nigeria",
+    location: "Nigeria",
     email: "abubakarwadada011@gmail.com",
     description: "Four fragrances composed for curious minds—and noses—reveal their stories via scent.",
     rating: { rate: 5.0, count: 14 }
@@ -51,7 +51,7 @@ export const marketplaceDatabase: Product[] = [
     image: "/lubna.jpeg",
     category: "beauty",
     subcategory: "Perfumes",
-    location: "Abuja, Nigeria",
+    location: "Nigeria",
     email: "abubakarwadada011@gmail.com", // 👈 Added brand email
     description: "Four fragrances composed for curious minds and noses reveal their stories via scent.",
     rating: { rate: 5.0, count: 22 }
@@ -64,7 +64,7 @@ export const marketplaceDatabase: Product[] = [
     image: "/lubna2.0.jpeg", 
     category: "beauty",
     subcategory: "Perfumes",
-    location: "Abuja, Nigeria",
+    location: "Nigeria",
     email: "abubakarwadada011@gmail.com",
     description: "Four fragrances composed for curious minds and noses reveal their stories via scent.",
     rating: { rate: 4.8, count: 11 }
@@ -80,8 +80,8 @@ export const marketplaceDatabase: Product[] = [
     image: "/ZinoBag1.JPG",
     category: "fashion",
     subcategory: "Bags",
-    location: "Abuja, Nigeria", 
-    email: "Zinocartelclothing@gmail.com", 
+    location: "Nigeria",
+    email: "Zinocartelclothing@gmail.com",
     description: "Built from late nights, limited resources, and relentless ambition. A statement utility piece transforming raw emotions into wearable art.",
     rating: { rate: 5.0, count: 8 }
   },
@@ -93,7 +93,7 @@ export const marketplaceDatabase: Product[] = [
     image: "/ZinoBag2.JPG",
     category: "fashion",
     subcategory: "Bags",
-    location: "Abuja, Nigeria", 
+    location: "Nigeria", 
     email: "Zinocartelclothing@gmail.com", 
     description: "Inspired by underground culture and craftsmanship. More than fashion, this piece is part of a movement for dreamers and creators.",
     rating: { rate: 4.7, count: 5 }
@@ -108,7 +108,7 @@ export const marketplaceDatabase: Product[] = [
     image: "/ZinoShirt1.JPG",
     category: "fashion",
     subcategory: "Shirts",
-    location: "Abuja, Nigeria",
+    location: "Nigeria",
     email: "Zinocartelclothing@gmail.com",
     description: "Carrying a story of resilience, rebellion, and self-expression. Crafted for those who refuse to follow the crowd and choose to create their own path.",
     rating: { rate: 4.9, count: 12 }
@@ -121,7 +121,7 @@ export const marketplaceDatabase: Product[] = [
     image: "/ZinoShirt2.JPG",
     category: "fashion",
     subcategory: "Shirts",
-    location: "Abuja, Nigeria", 
+    location: "Nigeria", 
     email: "Zinocartelclothing@gmail.com", 
     description: "Premium distressed canvas texture featuring detailed heavy floral embroidery and structural 'cartel dept' identification. Embracing the absolute beauty of imperfection.",
     rating: { rate: 5.0, count: 18 }
@@ -134,8 +134,8 @@ export const marketplaceDatabase: Product[] = [
     image: "/ZinoShirt3.JPG",
     category: "fashion",
     subcategory: "Shirts",
-    location: "Abuja, Nigeria",
-    email: "Zinocartelclothing@gmail.com", 
+    location: "Nigeria",
+    email: "Zinocartelclothing@gmail.com",
     description: "A movement for dreamers, creators, and outsiders turning their vision into reality. Heavy boxy cut with customized raw fringe detailing.",
     rating: { rate: 4.8, count: 15 }
   },
@@ -147,7 +147,7 @@ export const marketplaceDatabase: Product[] = [
     image: "/ZinoShirt4.JPG",
     category: "fashion",
     subcategory: "Shirts",
-    location: "Abuja, Nigeria", 
+    location: "Nigeria", 
     email: "Zinocartelclothing@gmail.com", 
     description: "Born from struggle, sacrifice, and an obsession with creating something real. Intricate utility silhouettes optimized for modern streetwear aesthetics.",
     rating: { rate: 4.6, count: 7 }
@@ -161,7 +161,7 @@ export const marketplaceDatabase: Product[] = [
     image: "/ZinoTrouser1.JPG",
     category: "fashion",
     subcategory: "Trousers",
-    location: "Abuja, Nigeria",
+    location: "Nigeria",
     email: "Zinocartelclothing@gmail.com",
     description: "Structured utility tailoring from the Zino Cartel collective. Designed with complex pockets and heavy stitching to stand the test of time.",
     rating: { rate: 4.9, count: 11 }
@@ -174,7 +174,7 @@ export const marketplaceDatabase: Product[] = [
     image: "/ZinoTrouser2.JPG",
     category: "fashion",
     subcategory: "Trousers",
-    location: "Abuja, Nigeria", 
+    location: "Nigeria", 
     email: "Zinocartelclothing@gmail.com", 
     description: "Custom washed finish denim celebrating the architectural beauty of imperfection. Features heavy metal hardware accents and classic relaxed tailoring.",
     rating: { rate: 5.0, count: 9 }
