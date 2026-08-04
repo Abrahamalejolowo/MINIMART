@@ -5,8 +5,8 @@ import Link from "next/link"
 
 const categories = [
   {
-    title: "Perfumes FROM SCENTS BY AW",  
-    description: "GIGS, GIGS 2.0, LUBNA and LUBNA 2.0",
+    title: "Parfumes",  
+    description: ",Perfumes FROM SCENTS BY AW,GIGS, GIGS 2.0, LUBNA and LUBNA 2.0,",
     image: "/LUBNA.jpeg",
     href: "/shop?category=perfumes",
     cta: "Explore Perfumes",
@@ -19,19 +19,19 @@ const categories = [
     cta: "Explore Footwear",
   },
   {
-    title: "Zino Cartel",
-    description: "Premium bags, embroidered shirts, and utility trousers born from resilience and underground culture.",
+    title: "Fashion",
+    description: "Premium bags, embroidered shirts, and utility trousers born from resilience and underground culture. eg ZINO CARTEL",
     image: "/ZinoShirt4.JPG",
     href: "/shop?category=fashion",
     cta: "Explore The Cartel",
   },
-  {
-    title: "Leather Goods",
-    description: "Premium bags, wallets, belts, and artisan accessories",
-    image: "/leather.avif", 
-    href: "/shop?category=leather",
-    cta: "Explore Leather",
-  },
+{
+  title: "Bags",
+  description: "Leather Bags, totes, wallets, and timeless artisan accessories.",
+  image: "/Bag5.PNG",
+  href: "/shop?category=fashion&subcategory=Bags",
+  cta: "Explore Bags",
+},
   {
     title: "Home & Living",
     description: "Handmade decor, candles, and artisan kitchenware",

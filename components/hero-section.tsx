@@ -5,19 +5,17 @@ import { useRouter } from 'next/navigation'
 import { ArrowRight, CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
-import store2 from "../public/Store.avif"
+import homepage from "../public/homepage.avif"
 
 export default function HeroSection() {
   const router = useRouter()
 
   return (
     <section className="relative w-full bg-background">
-      
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:py-10  lg:px-8">
-        
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:py-10 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl">
 
-          {/* IMAGE */}
+          {/* BACKGROUND IMAGE */}
           <motion.div
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
@@ -25,26 +23,26 @@ export default function HeroSection() {
             className="relative h-[520px] sm:h-[600px] md:h-[650px] w-full"
           >
             <Image
-              src={store2}
+              src={homepage}
               alt="Nigerian products marketplace"
               fill
               priority
               className="object-cover"
             />
 
-            {/* OVERLAY */}
+            {/* DARK OVERLAY */}
             <div className="absolute inset-0 bg-black/55" />
 
-            {/* CONTENT */}
+            {/* HERO CONTENT */}
             <div className="absolute inset-0 flex items-center">
               <div className="max-w-2xl px-6 sm:px-10 text-white">
 
-                {/* SMALL TEXT */}
+                {/* SMALL BRAND TAG */}
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="text-sm uppercase tracking-widest text-white/70"
+                  className="text-sm uppercase tracking-widest text-white/70 font-semibold"
                 >
                   Minmart Marketplace
                 </motion.p>
@@ -69,7 +67,7 @@ export default function HeroSection() {
                   Discover handcrafted products, support local creators, and experience authentic Nigerian craftsmanship in one place.
                 </motion.p>
 
-                {/* BUTTONS */}
+                {/* ACTION BUTTONS */}
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -80,16 +78,16 @@ export default function HeroSection() {
                     onClick={() => {
                       document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" })
                     }}
-                    className="bg-green-600 hover:bg-green-700 text-white px-6 py-6 text-base rounded-xl flex items-center gap-2"
+                    className="bg-[hsl(var(--green))] hover:opacity-90 text-white px-6 py-6 text-base rounded-xl flex items-center gap-2 shadow-lg transition-all"
                   >
                     Explore Products <ArrowRight className="h-4 w-4" />
                   </Button>
 
-                  {/* FIXED PARTNER BUTTON LINK */}
+                  {/* ROUTING TO COMING SOON PAGE */}
                   <Button
-                    onClick={() => router.push('/partner')} 
+                    onClick={() => router.push('/coming-soon')} 
                     variant="outline"
-                    className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-6 py-6 text-base rounded-xl"
+                    className="border-white/40 bg-white/10 backdrop-blur-md text-white hover:bg-white hover:text-black px-6 py-6 text-base rounded-xl transition-all"
                   >
                     Partner with Us
                   </Button>
@@ -99,22 +97,21 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* BADGE */}
+          {/* AUTHENTICITY BADGE */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: 1 }}
-            className="absolute bottom-5 right-5 flex items-center gap-2 rounded-xl bg-white px-4 py-3 shadow-lg"
+            className="absolute bottom-5 right-5 flex items-center gap-2 rounded-xl bg-white px-4 py-3 shadow-xl z-10"
           >
-            <CheckCircle className="h-5 w-5 text-green-600" />
-            <p className="text-sm font-medium text-black">
+            <CheckCircle className="h-5 w-5 text-emerald-600" />
+            <p className="text-sm font-bold text-slate-900">
               100% Authentic Products
             </p>
           </motion.div>
 
         </div>
       </div>
-
     </section>
   )
 }

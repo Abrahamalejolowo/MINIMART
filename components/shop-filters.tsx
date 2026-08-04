@@ -205,22 +205,6 @@ export function ShopFilters({ onFilterChange }: ShopFiltersProps) {
         </div>
 
         {/* Rating */}
-        <div>
-          <h3 className="mb-3 text-sm font-semibold text-foreground">Rating</h3>
-          <div className="flex flex-wrap gap-2">
-            {[5, 4, 3, 2, 1].map((rating) => (
-              <button
-                key={rating}
-                onClick={() => handleRatingChange(rating)}
-                className={`rounded-full border px-3 py-1 text-xs transition ${
-                  selectedRating === rating ? 'bg-green-600 text-white border-green-600' : 'bg-white border-gray-300 text-foreground'
-                }`}
-              >
-                ⭐ {rating}+
-              </button>
-            ))}
-          </div>
-        </div>
 
         <div className="flex gap-2 pt-2">
           <Button variant="outline" className="w-full" onClick={resetFilters}>Reset</Button>

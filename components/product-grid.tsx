@@ -11,7 +11,7 @@ interface Product {
   price: number
   image: string
   category: string
-  rating: number
+  // rating: number
   reviews: number
 }
 
@@ -63,14 +63,6 @@ export function ProductGrid({ products, onAddToCart }: ProductGridProps) {
               </h3>
 
               {/* Rating */}
-              <div className="mt-2 flex items-center gap-1">
-                <span className="text-sm">
-                  {'⭐'.repeat(Math.floor(product.rating))}
-                </span>
-                <span className="text-xs text-gray-500">
-                  ({product.reviews})
-                </span>
-              </div>
 
               {/* Price */}
               <div className="mt-3 flex items-center justify-between">

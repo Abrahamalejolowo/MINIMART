@@ -1,37 +1,39 @@
 export interface Product {
-  id: string | number
-  title: string
-  price: number
-  image: string
-  category: string
-  subcategory?: string
-  brand?: string
-  location?: string 
-  email?: string 
-  description: string
+  id: string | number;
+  title: string;
+  price: number;
+  image: string;
+  category: string;
+  subcategory?: string;
+  brand?: string;
+  location?: string;
+  email?: string;
+  color?: string;
+  description: string;
   rating: {
-    rate: number
-    count: number
-  }
+    rate: number;
+    count: number;
+  };
 }
 
 export const marketplaceDatabase: Product[] = [
   // --- SCENTS BY AW PREMIUM FRAGRANCES ---
   {
-    id: 'saw-gigs-1',
+    id: "saw-gigs-1",
     title: "GIGS (100ML)",
     price: 80000,
     brand: "SCENTS BY AW",
-    image: "/GIGS.jpeg", 
+    image: "/GIGS.jpeg",
     category: "beauty",
     subcategory: "Perfumes",
     location: "Nigeria",
     email: "abubakarwadada011@gmail.com",
-    description: "Four fragrances composed for curious minds—and noses—reveal their stories via scent.",
-    rating: { rate: 5.0, count: 14 }
+    description:
+      "Four fragrances composed for curious minds—and noses—reveal their stories via scent.",
+    rating: { rate: 5.0, count: 14 },
   },
   {
-    id: 'saw-gigs-2',
+    id: "saw-gigs-2",
     title: "GIGS 2.0 (100ML)",
     price: 80000,
     brand: "SCENTS BY AW",
@@ -39,12 +41,13 @@ export const marketplaceDatabase: Product[] = [
     category: "beauty",
     subcategory: "Perfumes",
     location: "Abuja, Nigeria",
-    email: "abubakarwadada011@gmail.com", // 👈 Added brand email
-    description: "Four fragrances composed for curious minds and noses reveal their stories via scent.",
-    rating: { rate: 4.9, count: 9 }
+    email: "abubakarwadada011@gmail.com",
+    description:
+      "Four fragrances composed for curious minds and noses reveal their stories via scent.",
+    rating: { rate: 4.9, count: 9 },
   },
   {
-    id: 'saw-lubna-1',
+    id: "saw-lubna-1",
     title: "LUBNA (100ML)",
     price: 80000,
     brand: "SCENTS BY AW",
@@ -52,28 +55,29 @@ export const marketplaceDatabase: Product[] = [
     category: "beauty",
     subcategory: "Perfumes",
     location: "Nigeria",
-    email: "abubakarwadada011@gmail.com", // 👈 Added brand email
-    description: "Four fragrances composed for curious minds and noses reveal their stories via scent.",
-    rating: { rate: 5.0, count: 22 }
+    email: "abubakarwadada011@gmail.com",
+    description:
+      "Four fragrances composed for curious minds and noses reveal their stories via scent.",
+    rating: { rate: 5.0, count: 22 },
   },
   {
-    id: 'saw-lubna-2',
+    id: "saw-lubna-2",
     title: "LUBNA 2.0 (100ML)",
     price: 80000,
     brand: "SCENTS BY AW",
-    image: "/lubna2.0.jpeg", 
+    image: "/lubna2.0.jpeg",
     category: "beauty",
     subcategory: "Perfumes",
     location: "Nigeria",
     email: "abubakarwadada011@gmail.com",
-    description: "Four fragrances composed for curious minds and noses reveal their stories via scent.",
-    rating: { rate: 4.8, count: 11 }
+    description:
+      "Four fragrances composed for curious minds and noses reveal their stories via scent.",
+    rating: { rate: 4.8, count: 11 },
   },
 
   // --- ZINO CARTEL COLLECTION ---
-  // Bags (2 items)
   {
-    id: 'zino-bag-1',
+    id: "zino-bag-1",
     title: "Zino Cartel Premium Duffle Bag",
     price: 50000,
     brand: "ZINO CARTEL",
@@ -82,26 +86,26 @@ export const marketplaceDatabase: Product[] = [
     subcategory: "Bags",
     location: "Nigeria",
     email: "Zinocartelclothing@gmail.com",
-    description: "Built from late nights, limited resources, and relentless ambition. A statement utility piece transforming raw emotions into wearable art.",
-    rating: { rate: 5.0, count: 8 }
+    description:
+      "Built from late nights, limited resources, and relentless ambition. A statement utility piece transforming raw emotions into wearable art.",
+    rating: { rate: 5.0, count: 8 },
   },
   {
-    id: 'zino-bag-2',
+    id: "zino-bag-2",
     title: "Zino Cartel Monogram Tote Bag",
     price: 50000,
     brand: "ZINO CARTEL",
     image: "/ZinoBag2.JPG",
     category: "fashion",
     subcategory: "Bags",
-    location: "Nigeria", 
-    email: "Zinocartelclothing@gmail.com", 
-    description: "Inspired by underground culture and craftsmanship. More than fashion, this piece is part of a movement for dreamers and creators.",
-    rating: { rate: 4.7, count: 5 }
+    location: "Nigeria",
+    email: "Zinocartelclothing@gmail.com",
+    description:
+      "Inspired by underground culture and craftsmanship. More than fashion, this piece is part of a movement for dreamers and creators.",
+    rating: { rate: 4.7, count: 5 },
   },
-
-  // Shirts (4 items)
   {
-    id: 'zino-shirt-1',
+    id: "zino-shirt-1",
     title: "Zino Cartel Graphic Streetwear Tee",
     price: 50000,
     brand: "ZINO CARTEL",
@@ -110,24 +114,26 @@ export const marketplaceDatabase: Product[] = [
     subcategory: "Shirts",
     location: "Nigeria",
     email: "Zinocartelclothing@gmail.com",
-    description: "Carrying a story of resilience, rebellion, and self-expression. Crafted for those who refuse to follow the crowd and choose to create their own path.",
-    rating: { rate: 4.9, count: 12 }
+    description:
+      "Carrying a story of resilience, rebellion, and self-expression. Crafted for those who refuse to follow the crowd and choose to create their own path.",
+    rating: { rate: 4.9, count: 12 },
   },
   {
-    id: 'zino-shirt-2',
+    id: "zino-shirt-2",
     title: "Zino Cartel Floral Embroidered Work Jacket Shirt",
     price: 50000,
     brand: "ZINO CARTEL",
     image: "/ZinoShirt2.JPG",
     category: "fashion",
     subcategory: "Shirts",
-    location: "Nigeria", 
-    email: "Zinocartelclothing@gmail.com", 
-    description: "Premium distressed canvas texture featuring detailed heavy floral embroidery and structural 'cartel dept' identification. Embracing the absolute beauty of imperfection.",
-    rating: { rate: 5.0, count: 18 }
+    location: "Nigeria",
+    email: "Zinocartelclothing@gmail.com",
+    description:
+      "Premium distressed canvas texture featuring detailed heavy floral embroidery and structural 'cartel dept' identification. Embracing the absolute beauty of imperfection.",
+    rating: { rate: 5.0, count: 18 },
   },
   {
-    id: 'zino-shirt-3',
+    id: "zino-shirt-3",
     title: "Zino Cartel Distressed Heavyweight Overshirt",
     price: 50000,
     brand: "ZINO CARTEL",
@@ -136,25 +142,26 @@ export const marketplaceDatabase: Product[] = [
     subcategory: "Shirts",
     location: "Nigeria",
     email: "Zinocartelclothing@gmail.com",
-    description: "A movement for dreamers, creators, and outsiders turning their vision into reality. Heavy boxy cut with customized raw fringe detailing.",
-    rating: { rate: 4.8, count: 15 }
+    description:
+      "A movement for dreamers, creators, and outsiders turning their vision into reality. Heavy boxy cut with customized raw fringe detailing.",
+    rating: { rate: 4.8, count: 15 },
   },
   {
-    id: 'zino-shirt-4',
+    id: "zino-shirt-4",
     title: "Zino Cartel Underground Luxury Button-Up",
     price: 50000,
     brand: "ZINO CARTEL",
     image: "/ZinoShirt4.JPG",
     category: "fashion",
     subcategory: "Shirts",
-    location: "Nigeria", 
-    email: "Zinocartelclothing@gmail.com", 
-    description: "Born from struggle, sacrifice, and an obsession with creating something real. Intricate utility silhouettes optimized for modern streetwear aesthetics.",
-    rating: { rate: 4.6, count: 7 }
+    location: "Nigeria",
+    email: "Zinocartelclothing@gmail.com",
+    description:
+      "Born from struggle, sacrifice, and an obsession with creating something real. Intricate utility silhouettes optimized for modern streetwear aesthetics.",
+    rating: { rate: 4.6, count: 7 },
   },
-
   {
-    id: 'zino-trousers-1',
+    id: "zino-trousers-1",
     title: "Zino Cartel Raw-Edge Cargo Pants",
     price: 50000,
     brand: "ZINO CARTEL",
@@ -163,20 +170,415 @@ export const marketplaceDatabase: Product[] = [
     subcategory: "Trousers",
     location: "Nigeria",
     email: "Zinocartelclothing@gmail.com",
-    description: "Structured utility tailoring from the Zino Cartel collective. Designed with complex pockets and heavy stitching to stand the test of time.",
-    rating: { rate: 4.9, count: 11 }
+    description:
+      "Structured utility tailoring from the Zino Cartel collective. Designed with complex pockets and heavy stitching to stand the test of time.",
+    rating: { rate: 4.9, count: 11 },
   },
   {
-    id: 'zino-trousers-2',
+    id: "zino-trousers-2",
     title: "Zino Cartel Relaxed Fit Distressed Denim",
     price: 50000,
     brand: "ZINO CARTEL",
     image: "/ZinoTrouser2.JPG",
     category: "fashion",
     subcategory: "Trousers",
-    location: "Nigeria", 
-    email: "Zinocartelclothing@gmail.com", 
-    description: "Custom washed finish denim celebrating the architectural beauty of imperfection. Features heavy metal hardware accents and classic relaxed tailoring.",
-    rating: { rate: 5.0, count: 9 }
-  }
-]
+    location: "Nigeria",
+    email: "Zinocartelclothing@gmail.com",
+    description:
+      "Custom washed finish denim celebrating the architectural beauty of imperfection. Features heavy metal hardware accents and classic relaxed tailoring.",
+    rating: { rate: 5.0, count: 9 },
+  },
+
+  // --- LUXURY BAGS COLLECTION ---
+  {
+    id: "bag-gardenia-1",
+    title: "GARDENIA BAG",
+    price: 60000,
+    brand: "LUXURY BAGS",
+    image: "/Bag5.PNG",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "yourbrand@email.com",
+    description:
+      "Elegant premium handbag crafted for everyday luxury. Available colors: Blue, Yellow, Green",
+    rating: { rate: 4.9, count: 16 },
+  },
+  {
+    id: "bag-yuri-1",
+    title: "BAG YURI",
+    price: 25000,
+    brand: "LUXURY BAGS",
+    image: "/Bag3.PNG",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Stylish and compact handbag suitable for casual and formal outings. Available colors: Pink, Multicolor.",
+    rating: { rate: 4.7, count: 12 },
+  },
+  {
+    id: "bag-maris-1",
+    title: "MARIS BAG",
+    price: 45000,
+    brand: "LUXURY BAGS",
+    image: "/Bag2.PNG",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Premium statement handbag with a timeless design. Available colors: Yellow, Brown, Purple, Red.",
+    rating: { rate: 4.8, count: 21 },
+  },
+  {
+    id: "bag-celeste-1",
+    title: "CELESTE TASSLE BAG",
+    price: 18000,
+    brand: "LUXURY BAGS",
+    image: "/Bag4.PNG",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Modern tassel handbag with a sleek finish, perfect for everyday use. Available color: Brown.",
+    rating: { rate: 4.6, count: 8 },
+  },
+  {
+    id: "bag-jayelle-1",
+    title: "BAG JAYELLE",
+    price: 45000,
+    brand: "LUXURY BAGS",
+    image: "/Bag6.PNG",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Sophisticated handbag designed with premium materials and attention to detail. Available colors: Pink, Brown.",
+    rating: { rate: 4.9, count: 14 },
+  },
+
+  // --- MAC COLLECTION ---
+  {
+    id: "yene-collection-1",
+    title: "Yene collection Crafted Handbag",
+    price: 26000,
+    brand: "Mac Collection",
+    image: "/YeneCollection4.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "yourbrand@email.com",
+    color: "Blue, Yellow, Green",
+    description:
+      "Part of the Yene Collection. Elegant premium handbag crafted for everyday luxury. Available colors: Blue, Yellow, Green.",
+    rating: { rate: 4.9, count: 16 },
+  },
+  {
+    id: "handles-classic-tote-1",
+    title: "Handles Classic Tote",
+    price: 41000,
+    brand: "Mac Collection",
+    image: "/MacHandleBag3.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    color: "Black, Brown, Tan",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Handles Classic Tote from the Handles Classics - 01 series. Stylish and compact handbag suitable for casual and formal outings.",
+    rating: { rate: 4.7, count: 12 },
+  },
+  {
+    id: "mac-handles-classics-1",
+    title: "Handles Classics",
+    price: 36000,
+    brand: "Mac Collection",
+    image: "/MacHandleBag1.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Office Satchel built for everyday functional luxury. Premium statement handbag with a timeless design. Available colors: Yellow, Brown, Purple, Red.",
+    rating: { rate: 4.8, count: 21 },
+  },
+  {
+    id: "office-satchel-1",
+    title: "Office Satchel",
+    price: 101000,
+    brand: "Mac Collection",
+    image: "/OfficeSatchel.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Modern tassel handbag with a sleek premium finish. Available in Brown, Black, and Tan.",
+    rating: { rate: 4.6, count: 8 },
+  },
+  {
+    id: "mac-everyday-backpack-1",
+    title: "BAG JAYELLE",
+    price: 61000,
+    brand: "Mac Collection",
+    image: "/EverydayBackbag.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Everyday backpack designed with premium materials and versatile utility. Available colors: Pink, Brown.",
+    rating: { rate: 4.9, count: 14 },
+  },
+
+  // --- HANDMADE BAGS / ANAKARE ---
+  {
+    id: "anakare-laptop-bag-1",
+    title: "Anakare Laptop Bag",
+    price: 11000,
+    brand: "Anakare",
+    image: "/AnkaraLaptopBag.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Authentic handmade Ankara laptop bag crafted with vibrant African print fabric, padded interior, and sturdy construction for daily protection.",
+    rating: { rate: 4.9, count: 14 },
+  },
+
+  // --- MAC HANDMADE BAGS ---
+  {
+    id: "lena-bag",
+    title: "Lena Bag",
+    price: 101000,
+    brand: "Mac Handmade Bags",
+    image: "/LanaBag1.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Abuja, Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Bespoke handmade bag available in Red, Deep Brown, Blue, and Light Brown. Delivery within Abuja is same-day for available stock; 2-4 days for other states via Courier. Bespoke items take 2-3 working days to produce.",
+    rating: { rate: 5.0, count: 10 },
+  },
+  {
+    id: "didion-collection-1",
+    title: "Didion collection",
+    price: 56000,
+    brand: "Didion collection",
+    image: "/MacHandleBag12.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Abuja, Nigeria",
+    email: "Maggylight3@gmail.com",
+    color: "Forest green, black, brown",
+    description:
+      "Bespoke handmade bag available in Red, Deep Brown, Blue, and Light Brown. Delivery within Abuja is same-day for available stock; 2-4 days for other states via Courier. Bespoke items take 2-3 working days to produce.",
+    rating: { rate: 5.0, count: 10 },
+  },
+  {
+    id: "mac-ek-bag-1",
+    title: "Mac Crafted Handmade Bag",
+    price: 56000,
+    brand: "Mac Handmade Bags",
+    image: "/MacHandleBag5.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Abuja, Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Premium handcrafted piece from the Ek Collection. Delivery within Abuja takes same-day if available, or 2-4 days to other states via Courier. Custom bespoke builds take 2-3 working days.",
+    rating: { rate: 4.8, count: 7 },
+  },
+  
+  {
+    id: "ek-collection-bag-1",
+    title: "Ek Collection Crafted Handmade Bag",
+    price: 36000,
+    brand: "Ek Collection",
+    image: "/MacEkCollection1.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Abuja, Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Compact handcrafted bag from the Ek Collection. Ships via Courier (same-day in Abuja for ready stock, 2-4 days nationwide). Custom orders take 2-3 working days for production.",
+    rating: { rate: 4.7, count: 5 },
+  },
+  {
+    id: "mac-crafted-bag-4",
+    title: "Mac Crafted Handmade Bag",
+    price: 41000,
+    brand: "Mac Handmade Bags",
+    image: "/MacHandleBag4.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Versatile handcrafted bag from the Ek Collection. Fast courier delivery (same-day in Abuja if ready, 2-4 days for other states). Production for bespoke orders takes 2-3 working days.",
+    rating: { rate: 4.9, count: 12 },
+  },
+
+  // --- NEW MAC MAYOR PURSES & TRAVEL BAGS ---
+  {
+    id: "mayor-mens-purse-06",
+    title: "Mayor Men’s Purse",
+    price: 36000,
+    brand: "Mayor Bags",
+    image: "/MayorPurse3.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Abuja, Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Handcrafted men's purse from the Mayor collection. Delivery within Abuja is same-day for available stock; 2-4 days for other states via Courier. Bespoke items take 2-3 working days.",
+    rating: { rate: 4.8, count: 9 },
+  },
+  {
+    id: "mayor-mens-purse-05",
+    title: "Mayor Men’s Purse 05",
+    price: 26000,
+    brand: "Mayor Bags",
+    image: "/MayorPurse2.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Sleek compact men's purse from the Mayor series. Delivery within Abuja takes same-day if available, or 2-4 days to other states via Courier.",
+    rating: { rate: 4.7, count: 11 },
+  },
+  {
+    id: "mayor-mens-purse-04-strapped",
+    title: "Mayor Men's Purse 04 - Strapped",
+    price: 26000,
+    brand: "Mayor Bags",
+    image: "/MayorPurse.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Strapped design for security and modern utility. Same-day delivery in Abuja when in stock, 2-4 days nationwide via courier.",
+    rating: { rate: 4.9, count: 15 },
+  },
+  {
+    id: "travel-bag",
+    title: "Travel Bag",
+    price: 66000,
+    brand: "Mac Handmade Bags",
+    image: "/TravelBag.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Durable handmade travel bag designed for short trips and weekend getaways. Courier delivery available nationwide.",
+    rating: { rate: 5.0, count: 6 },
+  },
+  {
+    id: "mac-travel-bag",
+    title: "Mac Executive Travel Bag",
+    price: 151000,
+    brand: "Mac Handmade Travel Bags",
+    image: "/TravelBag2.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Premium large-capacity handcrafted travel luggage bag. Exceptional durability and space for extended journeys.",
+    rating: { rate: 5.0, count: 8 },
+  },
+  {
+    id: "mac-mini-traveling-bag",
+    title: "Mini Traveling Bag",
+    price: 46000,
+    brand: "Mac Handmade Bags",
+    image: "/MacMinBag.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    color: "Brown, Black, White",
+    description:
+      "Compact mini travel bag available in Brown, Black, and White. Same-day delivery in Abuja if ready, 2-4 days for other states.",
+    rating: { rate: 4.8, count: 10 },
+  },
+  {
+    id: "mac-crafted-bag-13",
+    title: "Mac Crafted Handmade Bag",
+    price: 50000,
+    brand: "Mac Crafted Handmade Bags",
+    image: "/MacHandleBag13.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Versatile handcrafted bag from the Mac Collection. Fast courier delivery (same-day in Abuja if ready, 2-4 days for other states). Production for bespoke orders takes 2-3 working days.",
+    rating: { rate: 4.9, count: 12 },
+  },
+  {
+    id: "mac-crafted-bag-14",
+    title: "Mac Crafted Handmade Bag",
+    price: 50000,
+    brand: "Mac Crafted Handmade Bags",
+    image: "/MacHandleBag10.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Versatile handcrafted bag from the Mac Collection. Fast courier delivery (same-day in Abuja if ready, 2-4 days for other states). Production for bespoke orders takes 2-3 working days.",
+    rating: { rate: 4.9, count: 12 },
+  },
+    {
+    id: "mac-crafted-bag-15",
+    title: "Mac Crafted Handmade Bag",
+    price: 50000,
+    brand: "Mac Crafted Handmade Bags",
+    image: "/MacHandleBag8.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Versatile handcrafted bag from the Mac Collection. Fast courier delivery (same-day in Abuja if ready, 2-4 days for other states). Production for bespoke orders takes 2-3 working days.",
+    rating: { rate: 4.9, count: 12 },
+  },
+    {
+    id: "mac-crafted-bag-16",
+    title: "Mac Crafted Handmade Bag",
+    price: 50000,
+    brand: "Mac Crafted Handmade Bags",
+    image: "/MacHandleBag11.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Versatile handcrafted bag from the Mac Collection. Fast courier delivery (same-day in Abuja if ready, 2-4 days for other states). Production for bespoke orders takes 2-3 working days.",
+    rating: { rate: 4.9, count: 12 },
+  },
+    {
+    id: "mac-crafted-bag-17",
+    title: "Mac Crafted Handmade Bag",
+    price: 50000,
+    brand: "Mac Crafted Handmade Bags",
+    image: "/MacHandleBag7.jpeg",
+    category: "fashion",
+    subcategory: "Bags",
+    location: "Nigeria",
+    email: "Maggylight3@gmail.com",
+    description:
+      "Versatile handcrafted bag from the Mac Collection. Fast courier delivery (same-day in Abuja if ready, 2-4 days for other states). Production for bespoke orders takes 2-3 working days.",
+    rating: { rate: 4.9, count: 12 },
+  },
+];

@@ -104,13 +104,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                 <span className="inline-block text-[11px] font-mono tracking-widest text-gray-400 font-bold uppercase bg-gray-50 px-2.5 py-1 rounded-md border border-gray-100">
                   ID: {product.id}
                 </span>
-                {product.rating && (
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 border border-amber-100/50 rounded-lg text-amber-700 text-xs font-bold">
-                    <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
-                    <span>{product.rating.rate.toFixed(1)}</span>
-                    <span className="text-gray-400 font-normal">({product.rating.count})</span>
-                  </div>
-                )}
+               
               </div>
               
               <h1 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight leading-none sm:leading-tight">
@@ -195,7 +189,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                 ) : (
                   <>
                     <ShoppingBag className="h-4 w-4 stroke-[2.5px]" />
-                    Secure Purchase / Add to Cart
+                    Secure Purchase 
                   </>
                 )}
               </Button>
