@@ -21,6 +21,13 @@ import {
   Flame,
 } from "lucide-react";
 
+export interface FilterState {
+  category: string;
+  subcategories: string[];
+  priceRange: [number, number];
+  rating: number;
+}
+
 const ITEMS_PER_BATCH = 8;
 
 const cleanText = (text: string = "") => text.replace(/[()]/g, "").trim();
@@ -44,10 +51,10 @@ function ShopPageContent() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [heroDealIndex, setHeroDealIndex] = useState(0);
 
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<FilterState>({
     category: categoryParam || "all",
-    subcategories: [] as string[],
-    priceRange: [0, 100000] as [number, number],
+    subcategories: [],
+    priceRange: [0, 100000],
     rating: 0,
   });
 
@@ -82,7 +89,7 @@ function ShopPageContent() {
 
     if (categoryFromUrl) {
       setFilters((prev) => ({ ...prev, category: categoryFromUrl.toLowerCase() }));
-      setSearchQuery(""); 
+      setSearchQuery("");
     } else if (queryFromUrl) {
       handlePerformSearch(queryFromUrl);
     }
@@ -132,12 +139,22 @@ function ShopPageContent() {
   }, [products, heroDealIndex]);
 
   // Clear search query when filter category is manually changed from sidebar
-  const handleFilterChange = (newFilters: typeof filters) => {
+  const handleFilterChange = (newFilters: FilterState) => {
+    // If the main category changed, reset search query AND subcategories
     if (newFilters.category !== filters.category) {
       setSearchQuery("");
+      newFilters = {
+        ...newFilters,
+        subcategories: [], // Resets subcategories to avoid filter collision
+      };
     }
+
     setFilters(newFilters);
-    setVisibleCount(ITEMS_PER_BATCH);
+
+    // Resets pagination/batch count
+    if (typeof setVisibleCount === "function") {
+      setVisibleCount(ITEMS_PER_BATCH);
+    }
   };
 
   const handleSortChange = (sort: typeof sortBy) => {
@@ -145,11 +162,11 @@ function ShopPageContent() {
     setVisibleCount(ITEMS_PER_BATCH);
   };
 
-  const handleAddToCart = (p: Product) => {
+  const handleAddToCart = (p: Product | null) => {
     if (!p) return;
     addToCart({
       id: String(p.id),
-      name: cleanText(p.title),
+      name: cleanText(p.title ?? ""),
       price: p.price,
       image: p.image,
     });
@@ -164,6 +181,8 @@ function ShopPageContent() {
   };
 
   const filteredProducts = useMemo(() => {
+    const trimmedQuery = searchQuery.trim().toLowerCase();
+
     let result = products.filter((product) => {
       // 1. Category Filter
       if (filters.category !== "all") {
@@ -179,16 +198,16 @@ function ShopPageContent() {
         }
       }
 
-      // 2. Subcategory Filter
-      if (
-        filters.subcategories.length > 0 &&
-        (!product.subcategory ||
-          !filters.subcategories.some(
-            (sub) => sub.toLowerCase() === product.subcategory.toLowerCase()
-          ))
-      ) {
-        return false;
-      }
+      // 2. Subcategory Filter (TS Safe)
+if (
+  filters.subcategories.length > 0 &&
+  (!product.subcategory ||
+    !filters.subcategories.some(
+      (sub) => sub.toLowerCase() === product.subcategory?.toLowerCase()
+    ))
+) {
+  return false;
+}
 
       // 3. Price Range Filter
       if (
@@ -199,14 +218,23 @@ function ShopPageContent() {
       }
 
       // 4. Search Query Filter
-      const matchesSearch =
-        product.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (product.brand && product.brand.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (product.category && product.category.toLowerCase().includes(searchQuery.toLowerCase()));
+      if (trimmedQuery) {
+        const matchesSearch =
+          product.title?.toLowerCase().includes(trimmedQuery) ||
+          (product.brand &&
+            product.brand.toLowerCase().includes(trimmedQuery)) ||
+          (product.category &&
+            product.category.toLowerCase().includes(trimmedQuery));
 
-      return !searchQuery || matchesSearch;
+        if (!matchesSearch) {
+          return false;
+        }
+      }
+
+      return true;
     });
 
+    // Sorting Logic
     if (sortBy === "low-high") {
       result = [...result].sort((a, b) => a.price - b.price);
     } else if (sortBy === "high-low") {
@@ -316,8 +344,9 @@ function ShopPageContent() {
                     <Image
                       key={currentHeroProduct.id}
                       src={currentHeroProduct.image}
-                      alt={cleanText(currentHeroProduct.title)}
+                      alt={cleanText(currentHeroProduct.title ?? "")}
                       fill
+                      sizes="(max-width: 1024px) 100vw, 40vw"
                       unoptimized
                       className="object-cover group-hover:scale-105 transition-all duration-700 animate-in fade-in zoom-in-95"
                     />
@@ -350,7 +379,7 @@ function ShopPageContent() {
                       </div>
 
                       <h3 className="text-xl font-black text-white line-clamp-1 drop-shadow-md">
-                        {cleanText(currentHeroProduct.title)}
+                        {cleanText(currentHeroProduct.title ?? "")}
                       </h3>
 
                       <div className="flex items-center justify-between pt-1">
@@ -452,11 +481,11 @@ function ShopPageContent() {
                   <ProductGrid
                     products={displayedProducts.map((p) => ({
                       id: String(p.id),
-                      name: cleanText(p.title),
-                      brand: cleanText(p.brand),
+                      name: cleanText(p.title ?? ""),
+                      brand: cleanText(p.brand ?? ""),
                       price: p.price,
-                      image: p.image,
-                      category: p.category,
+                      image: p.image ?? "",
+                      category: p.category ?? "",
                       rawProduct: p,
                     }))}
                     wishlist={wishlist}
@@ -512,8 +541,9 @@ function ShopPageContent() {
             <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-secondary border border-border">
               <Image
                 src={selectedProduct.image}
-                alt={cleanText(selectedProduct.title)}
+                alt={cleanText(selectedProduct.title ?? "")}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 unoptimized
                 className="object-cover"
               />
@@ -526,7 +556,7 @@ function ShopPageContent() {
                 </span>
 
                 <h3 className="mt-2 text-xl font-black text-foreground leading-tight">
-                  {cleanText(selectedProduct.title)}
+                  {cleanText(selectedProduct.title ?? "")}
                 </h3>
 
                 {selectedProduct.brand && (
