@@ -5,13 +5,16 @@ import { useSearchParams } from 'next/navigation'
 import { ChevronDown, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-interface ShopFiltersProps {
-  onFilterChange: (filters: {
-    category: string
-    subcategories: string[] 
-    priceRange: [number, number]
-    rating: number
-  }) => void
+export interface FilterState {
+  category: string
+  subcategories: string[]
+  priceRange: [number, number]
+  rating: number
+}
+
+export interface ShopFiltersProps {
+  filters?: FilterState
+  onFilterChange: (filters: FilterState) => void
 }
 
 const categories = [
@@ -58,39 +61,55 @@ const categories = [
   },
 ]
 
-function ShopFiltersContent({ onFilterChange }: ShopFiltersProps) {
+function ShopFiltersContent({ filters, onFilterChange }: ShopFiltersProps) {
   const searchParams = useSearchParams()
   const categoryParam = searchParams.get('category')?.toLowerCase() || 'all'
   const subcategoryParam = searchParams.get('subcategory')
 
-  const [selectedCategory, setSelectedCategory] = useState(categoryParam)
-  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(
-    subcategoryParam ? [subcategoryParam] : []
-  )
+  const initialCategory = filters?.category || categoryParam
+  const initialSubcategories = filters?.subcategories || (subcategoryParam ? [subcategoryParam] : [])
+  const initialPriceRange = filters?.priceRange || [0, 100000]
+  const initialRating = filters?.rating || 0
+
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory)
+  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(initialSubcategories)
   const [expandedCategory, setExpandedCategory] = useState<string | null>(
-    categoryParam !== 'all' ? categoryParam : null
+    initialCategory !== 'all' ? initialCategory : null
   )
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000])
-  const [selectedRating, setSelectedRating] = useState(0)
+  const [priceRange, setPriceRange] = useState<[number, number]>(initialPriceRange)
+  const [selectedRating, setSelectedRating] = useState(initialRating)
   const [open, setOpen] = useState(false)
 
-  // Sync component state when the URL query parameter changes
+  // Keep state in sync if parent filters prop changes
+  useEffect(() => {
+    if (filters) {
+      setSelectedCategory(filters.category)
+      setSelectedSubcategories(filters.subcategories)
+      setPriceRange(filters.priceRange)
+      setSelectedRating(filters.rating)
+      setExpandedCategory(filters.category !== 'all' ? filters.category : null)
+    }
+  }, [filters])
+
+  // Sync state when URL query parameters change
   useEffect(() => {
     const urlCategory = searchParams.get('category')?.toLowerCase() || 'all'
     const urlSubcategory = searchParams.get('subcategory')
 
-    setSelectedCategory(urlCategory)
-    setExpandedCategory(urlCategory !== 'all' ? urlCategory : null)
+    if (!filters) {
+      setSelectedCategory(urlCategory)
+      setExpandedCategory(urlCategory !== 'all' ? urlCategory : null)
 
-    const initialSubcategories = urlSubcategory ? [urlSubcategory] : []
-    setSelectedSubcategories(initialSubcategories)
+      const subcats = urlSubcategory ? [urlSubcategory] : []
+      setSelectedSubcategories(subcats)
 
-    onFilterChange({
-      category: urlCategory,
-      subcategories: initialSubcategories,
-      priceRange,
-      rating: selectedRating,
-    })
+      onFilterChange({
+        category: urlCategory,
+        subcategories: subcats,
+        priceRange,
+        rating: selectedRating,
+      })
+    }
   }, [searchParams])
 
   const handleCategoryChange = (categoryId: string) => {
@@ -109,8 +128,8 @@ function ShopFiltersContent({ onFilterChange }: ShopFiltersProps) {
 
   const toggleSubcategory = (subcategory: string) => {
     const newSubcategories = selectedSubcategories.includes(subcategory)
-      ? selectedSubcategories.filter((s) => s !== subcategory) 
-      : [...selectedSubcategories, subcategory]  
+      ? selectedSubcategories.filter((s) => s !== subcategory)
+      : [...selectedSubcategories, subcategory]
     setSelectedSubcategories(newSubcategories)
 
     onFilterChange({
