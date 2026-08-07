@@ -16,15 +16,15 @@ const footerLinks = {
   ],
   Company: [
     { label: "About Us", href: "/about" },
-    { label: "Contact", href: "/contact" },
-    { label: "Careers", href: "/careers" },
-    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/coming-soon" },
+    { label: "Careers", href: "/coming-soon" },
+    { label: "Blog", href: "/coming-soon" },
   ],
   Support: [
-    { label: "Help Center", href: "/help" },
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Service", href: "/terms" },
-    { label: "Refund Policy", href: "/refund" },
+    { label: "Help Center", href: "/coming-soon" },
+    { label: "Privacy Policy", href: "/coming-soon" },
+    { label: "Terms of Service", href: "/coming-soon" },
+    { label: "Refund Policy", href: "/coming-soon" },
   ],
 };
 

@@ -44,14 +44,14 @@ export default function ComingSoonPage() {
         <div className="w-full max-w-3xl mx-auto flex flex-col items-center">
           
           {/* Status Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--green))]/30 bg-green-500/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[hsl(var(--green))] shadow-xs">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--green))]/30 bg-green-500/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-green-500 shadow-xs">
             <Sparkles className="h-3.5 w-3.5" />
             <span>Coming Soon</span>
           </div>
 
           {/* Main Headline */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.08] text-foreground max-w-2xl">
-            COMING  <span className="text-[hsl(var(--green))]">SOON.</span>
+            COMING  <span className="text-green-500">SOON.</span>
           </h1>
 
           {/* Description */}
