@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { ArrowRight, CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
-import homepage from "../public/homepage.avif"
+import HeroSectionImage from '../public/HeroSectionImage.png'
 
 export default function HeroSection() {
   const router = useRouter()
@@ -23,7 +23,7 @@ export default function HeroSection() {
             className="relative h-[520px] sm:h-[600px] md:h-[650px] w-full"
           >
             <Image
-              src={homepage}
+              src={HeroSectionImage}
               alt="Nigerian products marketplace"
               fill
               priority
@@ -78,7 +78,7 @@ export default function HeroSection() {
                     onClick={() => {
                       document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" })
                     }}
-                    className="bg-[hsl(var(--green))] hover:opacity-90 text-white px-6 py-6 text-base rounded-xl flex items-center gap-2 shadow-lg transition-all"
+                    className="bg-green-500 hover:bg-green-600 hover:opacity-90 text-white px-6 py-6 text-base rounded-xl flex items-center gap-2 shadow-lg transition-all"
                   >
                     Explore Products <ArrowRight className="h-4 w-4" />
                   </Button>

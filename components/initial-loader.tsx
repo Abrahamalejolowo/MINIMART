@@ -26,7 +26,7 @@ export function InitialLoader({ children }: { children: React.ReactNode }) {
         <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background text-foreground transition-opacity duration-500">
           <div className="relative flex items-center justify-center">
             {/* Glowing ring animation */}
-            <div className="absolute h-24 w-24 rounded-full bg-[hsl(var(--green))]/20 blur-2xl animate-pulse" />
+            <div className="absolute h-24 w-24 rounded-full bg-green-500/20 blur-2xl animate-pulse" />
             
             {/* Main spinner */}
             <Loader2 className="h-12 w-12 animate-spin text-[hsl(var(--green))]" />

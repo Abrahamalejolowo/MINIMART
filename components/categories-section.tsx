@@ -5,8 +5,8 @@ import Link from "next/link"
 
 const categories = [
   {
-    title: "Parfumes",  
-    description: ",Perfumes FROM SCENTS BY AW,GIGS, GIGS 2.0, LUBNA and LUBNA 2.0,",
+    title: "Perfumes",  
+    description: "Perfumes FROM SCENTS BY AW, GIGS, GIGS 2.0, LUBNA and LUBNA 2.0",
     image: "/LUBNA.jpeg",
     href: "/shop?category=perfumes",
     cta: "Explore Perfumes",
@@ -25,13 +25,13 @@ const categories = [
     href: "/shop?category=fashion",
     cta: "Explore The Cartel",
   },
-{
-  title: "Bags",
-  description: "Leather Bags, totes, wallets, and timeless artisan accessories.",
-  image: "/Bag5.PNG",
-  href: "/shop?category=fashion&subcategory=Bags",
-  cta: "Explore Bags",
-},
+  {
+    title: "Bags",
+    description: "Leather Bags, totes, wallets, and timeless artisan accessories.",
+    image: "/Bag5.PNG",
+    href: "/shop?category=bags", // Fixed: directly query bags category
+    cta: "Explore Bags",
+  },
   {
     title: "Home & Living",
     description: "Handmade decor, candles, and artisan kitchenware",
@@ -93,7 +93,6 @@ export function CategoriesSection() {
             flex gap-4 
             overflow-x-auto 
             pb-6
-            /* Scroll Snap Logic */
             snap-x snap-mandatory 
             scrollbar-hide
             md:grid md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:snap-none
@@ -105,9 +104,7 @@ export function CategoriesSection() {
               href={cat.href}
               className="
                 relative 
-                /* Card width on mobile */
                 min-w-[85%] sm:min-w-[60%] md:min-w-0
-                /* Snapping point */
                 snap-center 
                 aspect-[4/5] flex-shrink-0
                 overflow-hidden rounded-3xl group

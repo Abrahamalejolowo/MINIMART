@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { ChevronDown, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -16,6 +17,11 @@ interface ShopFiltersProps {
 const categories = [
   { id: 'all', name: 'All', subcategories: [] },
   {
+    id: 'bags',
+    name: 'Bags',
+    subcategories: ['Leather Bags', 'Totes', 'Wallets', 'Handbags', 'Backpacks'],
+  },
+  {
     id: 'footwear',
     name: 'Footwear',
     subcategories: ['Sneakers', 'Loafers', 'Sandals', 'Handmade Shoes', 'Leather Footwear'],
@@ -23,13 +29,17 @@ const categories = [
   {
     id: 'fashion',
     name: 'Fashion',
-    // 👈 Added 'Bags', 'Shirts', and 'Trousers' to match your new Zino Cartel product items
     subcategories: ['Ready-to-Wear', 'Streetwear', 'Shirts', 'Trousers', 'Bags', 'Womenswear', 'Menswear', 'Native Wear'],
+  },
+  {
+    id: 'perfumes',
+    name: 'Perfumes & Fragrances',
+    subcategories: ['Perfumes', 'Body Mists', 'Oils'],
   },
   {
     id: 'beauty',
     name: 'Beauty & Skincare',
-    subcategories: ['Skincare', 'Oils', 'Soaps', 'Perfumes', 'Cosmetics'],
+    subcategories: ['Skincare', 'Oils', 'Soaps', 'Cosmetics'],
   },
   {
     id: 'food',
@@ -48,17 +58,44 @@ const categories = [
   },
 ]
 
-export function ShopFilters({ onFilterChange }: ShopFiltersProps) {
-  const [selectedCategory, setSelectedCategory] = useState('all')
-  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]) // State as Array
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
+function ShopFiltersContent({ onFilterChange }: ShopFiltersProps) {
+  const searchParams = useSearchParams()
+  const categoryParam = searchParams.get('category')?.toLowerCase() || 'all'
+  const subcategoryParam = searchParams.get('subcategory')
+
+  const [selectedCategory, setSelectedCategory] = useState(categoryParam)
+  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(
+    subcategoryParam ? [subcategoryParam] : []
+  )
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(
+    categoryParam !== 'all' ? categoryParam : null
+  )
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000])
   const [selectedRating, setSelectedRating] = useState(0)
   const [open, setOpen] = useState(false)
 
+  // Sync component state when the URL query parameter changes
+  useEffect(() => {
+    const urlCategory = searchParams.get('category')?.toLowerCase() || 'all'
+    const urlSubcategory = searchParams.get('subcategory')
+
+    setSelectedCategory(urlCategory)
+    setExpandedCategory(urlCategory !== 'all' ? urlCategory : null)
+
+    const initialSubcategories = urlSubcategory ? [urlSubcategory] : []
+    setSelectedSubcategories(initialSubcategories)
+
+    onFilterChange({
+      category: urlCategory,
+      subcategories: initialSubcategories,
+      priceRange,
+      rating: selectedRating,
+    })
+  }, [searchParams])
+
   const handleCategoryChange = (categoryId: string) => {
     setSelectedCategory(categoryId)
-    setSelectedSubcategories([]) // Reset subcategories when main category changes
+    setSelectedSubcategories([])
 
     setExpandedCategory(expandedCategory === categoryId ? null : categoryId)
 
@@ -93,16 +130,6 @@ export function ShopFilters({ onFilterChange }: ShopFiltersProps) {
       subcategories: selectedSubcategories,
       priceRange: [safeMin, safeMax],
       rating: selectedRating,
-    })
-  }
-
-  const handleRatingChange = (rating: number) => {
-    setSelectedRating(rating)
-    onFilterChange({
-      category: selectedCategory,
-      subcategories: selectedSubcategories,
-      priceRange,
-      rating,
     })
   }
 
@@ -145,7 +172,7 @@ export function ShopFilters({ onFilterChange }: ShopFiltersProps) {
                   <button
                     onClick={() => handleCategoryChange(category.id)}
                     className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition ${
-                      isSelected ? 'bg-green-600 text-white' : 'bg-white text-foreground hover:bg-gray-50'
+                      isSelected ? 'bg-green-600 text-white font-semibold' : 'bg-white text-foreground hover:bg-gray-50'
                     }`}
                   >
                     <span>{category.name}</span>
@@ -168,7 +195,7 @@ export function ShopFilters({ onFilterChange }: ShopFiltersProps) {
                             }`}
                           >
                             <div className={`h-3 w-3 rounded border flex items-center justify-center ${isSubSelected ? 'bg-green-600 border-green-600' : 'border-gray-300'}`}>
-                                {isSubSelected && <div className="h-1.5 w-1.5 bg-white rounded-full" />}
+                              {isSubSelected && <div className="h-1.5 w-1.5 bg-white rounded-full" />}
                             </div>
                             {sub}
                           </button>
@@ -182,7 +209,6 @@ export function ShopFilters({ onFilterChange }: ShopFiltersProps) {
           </div>
         </div>
 
-        {/* Price and Rating sections remain the same... */}
         {/* Price */}
         <div>
           <h3 className="mb-3 text-sm font-semibold text-foreground">Price Range</h3>
@@ -204,13 +230,19 @@ export function ShopFilters({ onFilterChange }: ShopFiltersProps) {
           </div>
         </div>
 
-        {/* Rating */}
-
         <div className="flex gap-2 pt-2">
           <Button variant="outline" className="w-full" onClick={resetFilters}>Reset</Button>
           <Button className="w-full bg-green-600 text-white hover:bg-green-700" onClick={() => setOpen(false)}>Apply</Button>
         </div>
       </div>
     </>
+  )
+}
+
+export function ShopFilters(props: ShopFiltersProps) {
+  return (
+    <Suspense fallback={<div className="p-4 text-xs text-gray-400">Loading filters...</div>}>
+      <ShopFiltersContent {...props} />
+    </Suspense>
   )
 }

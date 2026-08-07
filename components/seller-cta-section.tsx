@@ -34,7 +34,7 @@ export function SellerCtaSection() {
                 ))}
               </ul>
               <Button
-              onClick={() => router.push('/partner')} 
+              onClick={() => router.push('/coming-soon')} 
                size="lg" className="mt-8 rounded-2">
                 Express Interest
               </Button>

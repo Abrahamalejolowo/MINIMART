@@ -66,7 +66,7 @@ export function ProductGrid({ products, onAddToCart }: ProductGridProps) {
 
               {/* Price */}
               <div className="mt-3 flex items-center justify-between">
-                <p className="font-heading text-lg font-bold text-green">
+                <p className="font-heading text-lg font-bold text-black">
                   ₦{product.price.toLocaleString()}
                 </p>
               </div>

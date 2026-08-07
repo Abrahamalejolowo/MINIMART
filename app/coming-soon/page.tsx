@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function ComingSoonPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-background font-sans text-foreground selection:bg-[hsl(var(--green))]/20 antialiased">
+    <div className="min-h-screen flex flex-col bg-background font-sans text-foreground selection:bg-green-500/20 antialiased">
       <StandaloneApplier />
 
       {/* Modern Header */}
@@ -39,12 +39,12 @@ export default function ComingSoonPage() {
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8 relative overflow-hidden">
         
         {/* Subtle Ambient Glow */}
-        <div className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-96 w-96 -translate-x-1/2 rounded-full bg-[hsl(var(--green))]/15 blur-[120px]" />
+        <div className="pointer-events-none absolute -top-40 left-1/2 -z-10 h-96 w-96 -translate-x-1/2 rounded-full bg-green-500/15 blur-[120px]" />
 
         <div className="w-full max-w-3xl mx-auto flex flex-col items-center">
           
           {/* Status Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--green))]/30 bg-[hsl(var(--green))]/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[hsl(var(--green))] shadow-xs">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--green))]/30 bg-green-500/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[hsl(var(--green))] shadow-xs">
             <Sparkles className="h-3.5 w-3.5" />
             <span>Coming Soon</span>
           </div>
@@ -69,7 +69,7 @@ export default function ComingSoonPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
             <Link
               href="/shop"
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-2xl bg-[hsl(var(--green))] px-8 py-4 text-xs font-bold uppercase tracking-wider text-white shadow-xl hover:opacity-95 active:scale-[0.98] transition-all"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-2xl bg-green-500 px-8 py-4 text-xs font-bold uppercase tracking-wider text-white shadow-xl hover:opacity-95 active:scale-[0.98] transition-all"
             >
               <span>Explore Active Products</span>
               <ArrowRight className="h-4 w-4" />

@@ -10,17 +10,37 @@ import Image from "next/image";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  
   const router = useRouter();
   const pathname = usePathname();
   
   const { cartItems: cart = [] } = useCart();
   const totalCartItems = (cart || []).reduce((total, item) => total + (item.quantity || 1), 0);
+
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Shop", href: "/shop" },
-    // { name: "Sell", href: "/sell" },
     { name: "About", href: "/about" },
   ];
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return;
+
+    // Handle "bag" or "bags" redirect to shop category
+    if (query === "bag" || query === "bags") {
+      router.push("/shop?category=bags");
+    } else {
+      router.push(`/shop?q=${encodeURIComponent(query)}`);
+    }
+
+    setSearchOpen(false);
+    setSearchQuery("");
+    setMobileOpen(false);
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background">
@@ -60,14 +80,36 @@ export function Navbar() {
 
         {/* Right Side Icons & Actions */}
         <div className="flex items-center gap-4">
-          <button
-            aria-label="Search"
-            className="text-foreground transition-colors hover:text-green-500"
-          >
-            <Search className="h-5 w-5" />
-          </button>
+          {/* Desktop Search */}
+          {searchOpen ? (
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoFocus
+                className="w-40 sm:w-60 rounded-lg border border-border bg-background px-3 py-1.5 text-sm outline-none focus:border-green-500"
+              />
+              <button
+                type="button"
+                onClick={() => setSearchOpen(false)}
+                className="ml-2 text-foreground hover:text-green-500"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </form>
+          ) : (
+            <button
+              onClick={() => setSearchOpen(true)}
+              aria-label="Search"
+              className="text-foreground transition-colors hover:text-green-500"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+          )}
 
-          {/* Desktop Cart Icon with Dynamic Counter Badge */}
+          {/* Cart Icon */}
           <Link
             href="/cart"
             aria-label="Shopping Cart"
@@ -76,8 +118,6 @@ export function Navbar() {
             }`}
           >
             <ShoppingBag className="h-5 w-5" />
-            
-            {/* 2. Visual Badge Indicator displaying many items are inside */}
             {totalCartItems > 0 && (
               <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-[10px] font-bold text-white ring-2 ring-background animate-in zoom-in-50">
                 {totalCartItems}
@@ -93,17 +133,13 @@ export function Navbar() {
             Login
           </Button>
           
-          {/* Mobile Layout Menu Button */}
+          {/* Mobile Menu Button */}
           <button
             aria-label="Toggle mobile menu"
             className="text-foreground md:hidden transition-colors hover:text-green-500"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
-            {mobileOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
       </nav>
@@ -111,6 +147,20 @@ export function Navbar() {
       {/* Mobile Menu Dropdown */}
       {mobileOpen && (
         <div className="border-t border-border bg-background px-4 pb-6 md:hidden">
+          {/* Mobile Search Form */}
+          <form onSubmit={handleSearchSubmit} className="mt-4 flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-green-500"
+            />
+            <Button type="submit" size="sm" className="bg-green-500 text-white hover:bg-green-600">
+              <Search className="h-4 w-4" />
+            </Button>
+          </form>
+
           <ul className="flex flex-col gap-4 pt-4">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
@@ -129,7 +179,6 @@ export function Navbar() {
               );
             })}
             
-            {/* Mobile Layout Cart Row with direct counter value */}
             <li>
               <Link
                 href="/cart"
