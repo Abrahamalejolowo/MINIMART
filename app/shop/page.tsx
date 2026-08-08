@@ -35,12 +35,16 @@ const cleanText = (text: string = "") => text.replace(/[()]/g, "").trim();
 function ShopPageContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
-  const initialQuery = categoryParam ? "" : searchParams.get("q") || searchParams.get("search") || "";
+  const initialQuery = categoryParam
+    ? ""
+    : searchParams.get("q") || searchParams.get("search") || "";
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [sortBy, setSortBy] = useState<"default" | "low-high" | "high-low">("default");
+  const [sortBy, setSortBy] = useState<"default" | "low-high" | "high-low">(
+    "default",
+  );
 
   const [wishlist, setWishlist] = useState<(string | number)[]>([]);
 
@@ -85,10 +89,14 @@ function ShopPageContent() {
   // Sync search query with URL params
   useEffect(() => {
     const categoryFromUrl = searchParams.get("category");
-    const queryFromUrl = searchParams.get("q") || searchParams.get("search") || "";
+    const queryFromUrl =
+      searchParams.get("q") || searchParams.get("search") || "";
 
     if (categoryFromUrl) {
-      setFilters((prev) => ({ ...prev, category: categoryFromUrl.toLowerCase() }));
+      setFilters((prev) => ({
+        ...prev,
+        category: categoryFromUrl.toLowerCase(),
+      }));
       setSearchQuery("");
     } else if (queryFromUrl) {
       handlePerformSearch(queryFromUrl);
@@ -107,12 +115,19 @@ function ShopPageContent() {
 
     // Check if the searched term matches any category name
     const matchedCategory = availableCategories.find(
-      (cat) => cat === normalizedTerm || cat.includes(normalizedTerm) || normalizedTerm.includes(cat)
+      (cat) =>
+        cat === normalizedTerm ||
+        cat.includes(normalizedTerm) ||
+        normalizedTerm.includes(cat),
     );
 
     if (matchedCategory) {
       // Switch category filter to matched category and clear search box query
-      setFilters((prev) => ({ ...prev, category: matchedCategory, subcategories: [] }));
+      setFilters((prev) => ({
+        ...prev,
+        category: matchedCategory,
+        subcategories: [],
+      }));
       setSearchQuery("");
     } else {
       // If no category match, keep standard keyword search and reset category to all
@@ -176,7 +191,7 @@ function ShopPageContent() {
     setWishlist((prev) =>
       prev.includes(productId)
         ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
+        : [...prev, productId],
     );
   };
 
@@ -199,15 +214,15 @@ function ShopPageContent() {
       }
 
       // 2. Subcategory Filter (TS Safe)
-if (
-  filters.subcategories.length > 0 &&
-  (!product.subcategory ||
-    !filters.subcategories.some(
-      (sub) => sub.toLowerCase() === product.subcategory?.toLowerCase()
-    ))
-) {
-  return false;
-}
+      if (
+        filters.subcategories.length > 0 &&
+        (!product.subcategory ||
+          !filters.subcategories.some(
+            (sub) => sub.toLowerCase() === product.subcategory?.toLowerCase(),
+          ))
+      ) {
+        return false;
+      }
 
       // 3. Price Range Filter
       if (
@@ -234,7 +249,7 @@ if (
       return true;
     });
 
-    // Sorting Logic
+
     if (sortBy === "low-high") {
       result = [...result].sort((a, b) => a.price - b.price);
     } else if (sortBy === "high-low") {
@@ -266,7 +281,7 @@ if (
           handleLoadMore();
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     if (loadMoreRef.current) observer.observe(loadMoreRef.current);
@@ -299,7 +314,8 @@ if (
                 </h1>
 
                 <p className="text-sm sm:text-base text-muted-foreground max-w-xl leading-relaxed">
-                  Support independent local artisans, fashion creators, and food producers with nationwide tracked delivery.
+                  Support independent local artisans, fashion creators, and food
+                  producers with nationwide tracked delivery.
                 </p>
 
                 {/* SEARCH INPUT BAR */}
@@ -354,7 +370,8 @@ if (
 
                     <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/90 backdrop-blur-md text-white px-3 py-1 text-xs font-black uppercase tracking-wider shadow-lg">
-                        <Flame className="h-3.5 w-3.5 fill-current" /> Spotlight Product
+                        <Flame className="h-3.5 w-3.5 fill-current" /> Spotlight
+                        Product
                       </span>
 
                       <button
@@ -385,7 +402,10 @@ if (
                       <div className="flex items-center justify-between pt-1">
                         <div>
                           <span className="text-2xl font-black text-white drop-shadow-md">
-                            ₦{new Intl.NumberFormat("en-NG").format(currentHeroProduct.price)}
+                            ₦
+                            {new Intl.NumberFormat("en-NG").format(
+                              currentHeroProduct.price,
+                            )}
                           </span>
                         </div>
 
@@ -419,7 +439,10 @@ if (
           <div className="grid gap-8 lg:grid-cols-4">
             <aside className="lg:col-span-1">
               <div className="sticky top-20">
-                <ShopFilters filters={filters} onFilterChange={handleFilterChange} />
+                <ShopFilters
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                />
               </div>
             </aside>
 
@@ -429,14 +452,16 @@ if (
                   {filters.category !== "all"
                     ? `Category: ${filters.category}`
                     : searchQuery
-                    ? `Search results for "${searchQuery}"`
-                    : "Explore Catalog"}
+                      ? `Search results for "${searchQuery}"`
+                      : "Explore Catalog"}
                 </h2>
 
                 <div className="relative inline-flex items-center">
                   <select
                     value={sortBy}
-                    onChange={(e) => handleSortChange(e.target.value as typeof sortBy)}
+                    onChange={(e) =>
+                      handleSortChange(e.target.value as typeof sortBy)
+                    }
                     className="appearance-none rounded-xl border border-border bg-card pl-3 pr-8 py-2 text-xs font-bold uppercase tracking-wider text-foreground outline-none focus:ring-2 focus:ring-green-500 cursor-pointer shadow-xs"
                   >
                     <option value="default">Sort: Featured</option>
@@ -450,7 +475,10 @@ if (
               {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {Array.from({ length: 6 }).map((_, i) => (
-                    <div key={i} className="rounded-2xl border border-border bg-card p-4 space-y-4 animate-pulse">
+                    <div
+                      key={i}
+                      className="rounded-2xl border border-border bg-card p-4 space-y-4 animate-pulse"
+                    >
                       <div className="h-48 rounded-xl bg-secondary" />
                       <div className="h-4 w-3/4 rounded bg-secondary" />
                       <div className="h-4 w-1/2 rounded bg-secondary" />
@@ -462,7 +490,9 @@ if (
                   <div className="flex h-14 w-14 items-center justify-center rounded-full bg-secondary text-green-500 mb-3">
                     <PackageX className="h-7 w-7" />
                   </div>
-                  <h3 className="text-lg font-black text-foreground">No Items Found</h3>
+                  <h3 className="text-lg font-black text-foreground">
+                    No Items Found
+                  </h3>
                   <p className="mt-1 text-xs text-muted-foreground max-w-xs">
                     Try adjusting your filters or search phrase.
                   </p>
@@ -482,20 +512,25 @@ if (
                     products={displayedProducts.map((p) => ({
                       id: String(p.id),
                       name: cleanText(p.title ?? ""),
-                      brand: cleanText(p.brand ?? ""),
                       price: p.price,
                       image: p.image ?? "",
                       category: p.category ?? "",
-                      rawProduct: p,
+                      reviews: p.rating?.count ?? 0,
                     }))}
-                    wishlist={wishlist}
-                    onToggleWishlist={toggleWishlist}
-                    onAddToCart={(item: any) => handleAddToCart(item.rawProduct)}
-                    onQuickView={(item: any) => setSelectedProduct(item.rawProduct)}
+                    onAddToCart={(item) =>
+                      handleAddToCart(
+                        displayedProducts.find(
+                          (p) => String(p.id) === item.id,
+                        ) || null,
+                      )
+                    }
                   />
 
                   {hasMore && (
-                    <div ref={loadMoreRef} className="mt-12 flex flex-col items-center justify-center gap-3 py-6">
+                    <div
+                      ref={loadMoreRef}
+                      className="mt-12 flex flex-col items-center justify-center gap-3 py-6"
+                    >
                       <button
                         onClick={handleLoadMore}
                         disabled={loadingMore}
@@ -566,7 +601,8 @@ if (
                 )}
 
                 <p className="mt-3 text-2xl font-black text-foreground">
-                  ₦{new Intl.NumberFormat("en-NG").format(selectedProduct.price)}
+                  ₦
+                  {new Intl.NumberFormat("en-NG").format(selectedProduct.price)}
                 </p>
 
                 <hr className="my-4 border-border" />
@@ -614,7 +650,13 @@ if (
 
 export default function ShopPage() {
   return (
-    <Suspense fallback={<div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">Loading Marketplace...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
+          Loading Marketplace...
+        </div>
+      }
+    >
       <ShopPageContent />
     </Suspense>
   );

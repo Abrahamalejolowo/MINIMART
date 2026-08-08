@@ -12,7 +12,7 @@ interface Product {
   image: string
   category: string
   // rating: number
-  reviews: number
+  reviews?: number
 }
 
 interface ProductGridProps {
