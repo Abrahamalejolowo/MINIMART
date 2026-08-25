@@ -1,12 +1,20 @@
-'use client'
+"use client";
 
-import { useState, useMemo } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { Eye, EyeOff, ShieldCheck, ArrowRight, AlertCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { useState, useMemo } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import {
+  Eye,
+  EyeOff,
+  ShieldCheck,
+  ArrowRight,
+  AlertCircle,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
 
-import LogPages from '@/public/LogPages.jpg'
+import LogPages from "@/public/LogPages.jpg";
 
 // Inline Social Icon Components
 function GoogleIcon() {
@@ -29,7 +37,7 @@ function GoogleIcon() {
         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
       />
     </svg>
-  )
+  );
 }
 
 function FacebookIcon() {
@@ -37,84 +45,138 @@ function FacebookIcon() {
     <svg className="w-4 h-4 fill-[#1877F2]" viewBox="0 0 24 24">
       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
     </svg>
-  )
+  );
 }
 
 export default function SignupPage() {
+  const router = useRouter();
+  const supabase = createClient();
+
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  })
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [agreeToTerms, setAgreeToTerms] = useState(false)
-  const [isFocused, setIsFocused] = useState<string | null>(null)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [isFocused, setIsFocused] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   // Password strength calculation
   const passwordStrength = useMemo(() => {
-    const pass = formData.password
-    if (!pass) return { score: 0, label: '', color: 'bg-gray-200' }
-    let score = 0
-    if (pass.length >= 8) score++
-    if (/[A-Z]/.test(pass)) score++
-    if (/[0-9]/.test(pass)) score++
-    if (/[^A-Za-z0-9]/.test(pass)) score++
+    const pass = formData.password;
+    if (!pass) return { score: 0, label: "", color: "bg-gray-200" };
+    let score = 0;
+    if (pass.length >= 8) score++;
+    if (/[A-Z]/.test(pass)) score++;
+    if (/[0-9]/.test(pass)) score++;
+    if (/[^A-Za-z0-9]/.test(pass)) score++;
 
     switch (score) {
-      case 1: return { score: 25, label: 'Weak', color: 'bg-red-500' }
-      case 2: return { score: 50, label: 'Fair', color: 'bg-orange-400' }
-      case 3: return { score: 75, label: 'Good', color: 'bg-blue-500' }
-      case 4: return { score: 100, label: 'Strong', color: 'bg-[#1db954]' }
-      default: return { score: 10, label: 'Too Short', color: 'bg-red-500' }
+      case 1:
+        return { score: 25, label: "Weak", color: "bg-red-500" };
+      case 2:
+        return { score: 50, label: "Fair", color: "bg-orange-400" };
+      case 3:
+        return { score: 75, label: "Good", color: "bg-blue-500" };
+      case 4:
+        return { score: 100, label: "Strong", color: "bg-[#1db954]" };
+      default:
+        return { score: 10, label: "Too Short", color: "bg-red-500" };
     }
-  }, [formData.password])
+  }, [formData.password]);
 
   const passwordMatch = useMemo(() => {
-    if (!formData.confirmPassword) return null
-    return formData.password === formData.confirmPassword
-  }, [formData.password, formData.confirmPassword])
+    if (!formData.confirmPassword) return null;
+    return formData.password === formData.confirmPassword;
+  }, [formData.password, formData.confirmPassword]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setErrorMessage(null)
+    e.preventDefault();
+    setErrorMessage(null);
 
+    // Client-side validations
     if (formData.password !== formData.confirmPassword) {
-      setErrorMessage('Passwords do not match.')
-      return
+      setErrorMessage("Passwords do not match.");
+      return;
     }
     if (!agreeToTerms) {
-      setErrorMessage('Please agree to terms and conditions.')
-      return
+      setErrorMessage("Please agree to terms and conditions.");
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      console.log('Signup success:', formData)
-    } catch (err) {
-      console.error(err)
-      setErrorMessage('Something went wrong. Please try again.')
-    } finally {
-      setIsLoading(false)
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        options: {
+          data: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            full_name: `${formData.firstName} ${formData.lastName}`.trim(),
+          },
+          emailRedirectTo: `${window.location.origin}/api/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setErrorMessage(error.message || "Registration failed.");
+        setIsLoading(false);
+        return;
+      }
+
+      // If email confirmation is disabled or user created, redirect to home or login
+      if (data.session) {
+        router.push("/");
+        router.refresh();
+      } else {
+        router.push("/login?message=Check your email to confirm your account");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      setErrorMessage("Something went wrong. Please try again.");
+      setIsLoading(false);
     }
-  }
+  };
+
+  const handleGoogleSignUp = async () => {
+    setErrorMessage(null);
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/api/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setErrorMessage(error.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Google sign-up error:", error);
+      setErrorMessage("Unable to continue with Google. Please try again.");
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-3 md:p-6 antialiased">
       {/* Compact Container Box */}
       <main className="w-full max-w-3xl bg-white rounded-2xl shadow-md overflow-hidden flex flex-col md:flex-row border border-gray-100">
-        
         {/* LEFT SIDE: Image / Branding Panel */}
         <div className="relative w-full md:w-[42%] hidden md:block">
           <Image
@@ -128,35 +190,47 @@ export default function SignupPage() {
 
           {/* Text Content */}
           <div className="absolute inset-0 p-6 flex flex-col justify-between text-white z-10">
-            <Link href="/" className="font-bold text-xl tracking-tight text-white">
+            <Link
+              href="/"
+              className="font-bold text-xl tracking-tight text-white"
+            >
               Minmart
             </Link>
-            
+
             <div>
               <h2 className="text-xl font-bold mb-2 leading-snug">
                 Join Nigeria&apos;s Premium Creative Trade
               </h2>
               <p className="text-white/85 text-xs font-normal leading-relaxed">
-                Access verified local brands, handcrafted lifestyle pieces, custom footwear, and fine scents.
+                Access verified local brands, handcrafted lifestyle pieces,
+                custom footwear, and fine scents.
               </p>
             </div>
 
             <div className="flex items-center space-x-2 border-t border-white/20 pt-4">
               <ShieldCheck className="h-4 w-4 text-white shrink-0" />
-              <span className="text-[11px] font-medium text-white/90">Verified Merchant Protocol</span>
+              <span className="text-[11px] font-medium text-white/90">
+                Verified Merchant Protocol
+              </span>
             </div>
           </div>
         </div>
 
         {/* RIGHT SIDE: Compact Form */}
         <div className="w-full md:w-[58%] p-5 md:p-8 flex flex-col justify-center">
-          
           <div className="mb-4">
-            <Link href="/" className="inline-block md:hidden text-2xl font-black text-[#1db954] tracking-tight mb-1">
+            <Link
+              href="/"
+              className="inline-block md:hidden text-2xl font-black text-[#1db954] tracking-tight mb-1"
+            >
               Minmart
             </Link>
-            <h2 className="text-xl font-bold text-gray-900 tracking-tight">Create your account</h2>
-            <p className="text-xs text-gray-500">Get started with your free profile today.</p>
+            <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+              Create your account
+            </h2>
+            <p className="text-xs text-gray-500">
+              Get started with your free profile today.
+            </p>
           </div>
 
           {/* Error Banner */}
@@ -168,11 +242,13 @@ export default function SignupPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-3 flex flex-col">
-            
             {/* Names Row */}
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1">
-                <label htmlFor="firstName" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 ml-0.5">
+                <label
+                  htmlFor="firstName"
+                  className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 ml-0.5"
+                >
                   First Name
                 </label>
                 <input
@@ -181,18 +257,23 @@ export default function SignupPage() {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
-                  onFocus={() => setIsFocused('firstName')}
+                  onFocus={() => setIsFocused("firstName")}
                   onBlur={() => setIsFocused(null)}
                   placeholder="Chidi"
                   className={`w-full rounded-lg border bg-white px-3 py-2 text-xs text-gray-900 outline-none transition-all ${
-                    isFocused === 'firstName' ? 'border-[#1db954] ring-1 ring-[#1db954]' : 'border-gray-200'
+                    isFocused === "firstName"
+                      ? "border-[#1db954] ring-1 ring-[#1db954]"
+                      : "border-gray-200"
                   }`}
                   required
                 />
               </div>
 
               <div className="flex-1">
-                <label htmlFor="lastName" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 ml-0.5">
+                <label
+                  htmlFor="lastName"
+                  className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 ml-0.5"
+                >
                   Last Name
                 </label>
                 <input
@@ -201,11 +282,13 @@ export default function SignupPage() {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
-                  onFocus={() => setIsFocused('lastName')}
+                  onFocus={() => setIsFocused("lastName")}
                   onBlur={() => setIsFocused(null)}
                   placeholder="Okonkwo"
                   className={`w-full rounded-lg border bg-white px-3 py-2 text-xs text-gray-900 outline-none transition-all ${
-                    isFocused === 'lastName' ? 'border-[#1db954] ring-1 ring-[#1db954]' : 'border-gray-200'
+                    isFocused === "lastName"
+                      ? "border-[#1db954] ring-1 ring-[#1db954]"
+                      : "border-gray-200"
                   }`}
                   required
                 />
@@ -214,7 +297,10 @@ export default function SignupPage() {
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 ml-0.5">
+              <label
+                htmlFor="email"
+                className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 ml-0.5"
+              >
                 Email Address
               </label>
               <input
@@ -223,11 +309,13 @@ export default function SignupPage() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                onFocus={() => setIsFocused('email')}
+                onFocus={() => setIsFocused("email")}
                 onBlur={() => setIsFocused(null)}
                 placeholder="name@domain.com"
                 className={`w-full rounded-lg border bg-white px-3 py-2 text-xs text-gray-900 outline-none transition-all ${
-                  isFocused === 'email' ? 'border-[#1db954] ring-1 ring-[#1db954]' : 'border-gray-200'
+                  isFocused === "email"
+                    ? "border-[#1db954] ring-1 ring-[#1db954]"
+                    : "border-gray-200"
                 }`}
                 required
               />
@@ -235,21 +323,26 @@ export default function SignupPage() {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 ml-0.5">
+              <label
+                htmlFor="password"
+                className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 ml-0.5"
+              >
                 Password
               </label>
               <div className="relative">
                 <input
                   id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  onFocus={() => setIsFocused('password')}
+                  onFocus={() => setIsFocused("password")}
                   onBlur={() => setIsFocused(null)}
                   placeholder="••••••••"
                   className={`w-full rounded-lg border bg-white pl-3 pr-9 py-2 text-xs text-gray-900 outline-none transition-all ${
-                    isFocused === 'password' ? 'border-[#1db954] ring-1 ring-[#1db954]' : 'border-gray-200'
+                    isFocused === "password"
+                      ? "border-[#1db954] ring-1 ring-[#1db954]"
+                      : "border-gray-200"
                   }`}
                   required
                 />
@@ -258,7 +351,11 @@ export default function SignupPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1db954] transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
 
@@ -271,7 +368,10 @@ export default function SignupPage() {
                     />
                   </div>
                   <p className="text-[10px] text-gray-400 font-medium text-right">
-                    Strength: <span className="font-semibold text-gray-600">{passwordStrength.label}</span>
+                    Strength:{" "}
+                    <span className="font-semibold text-gray-600">
+                      {passwordStrength.label}
+                    </span>
                   </p>
                 </div>
               )}
@@ -279,23 +379,30 @@ export default function SignupPage() {
 
             {/* Confirm Password Field */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 ml-0.5">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 ml-0.5"
+              >
                 Confirm Password
               </label>
               <div className="relative">
                 <input
                   id="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  onFocus={() => setIsFocused('confirmPassword')}
+                  onFocus={() => setIsFocused("confirmPassword")}
                   onBlur={() => setIsFocused(null)}
                   placeholder="••••••••"
                   className={`w-full rounded-lg border bg-white pl-3 pr-9 py-2 text-xs text-gray-900 outline-none transition-all ${
-                    isFocused === 'confirmPassword' ? 'border-[#1db954] ring-1 ring-[#1db954]' :
-                    passwordMatch === true ? 'border-[#1db954]' :
-                    passwordMatch === false ? 'border-red-300 bg-red-50/20' : 'border-gray-200'
+                    isFocused === "confirmPassword"
+                      ? "border-[#1db954] ring-1 ring-[#1db954]"
+                      : passwordMatch === true
+                        ? "border-[#1db954]"
+                        : passwordMatch === false
+                          ? "border-red-300 bg-red-50/20"
+                          : "border-gray-200"
                   }`}
                   required
                 />
@@ -304,12 +411,18 @@ export default function SignupPage() {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1db954] transition-colors"
                 >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
 
               {passwordMatch === false && (
-                <p className="text-[10px] text-red-500 font-medium mt-0.5 ml-0.5">Passwords do not match</p>
+                <p className="text-[10px] text-red-500 font-medium mt-0.5 ml-0.5">
+                  Passwords do not match
+                </p>
               )}
             </div>
 
@@ -322,13 +435,22 @@ export default function SignupPage() {
                 onChange={(e) => setAgreeToTerms(e.target.checked)}
                 className="w-3.5 h-3.5 text-[#1db954] bg-white border-gray-300 rounded focus:ring-[#1db954]"
               />
-              <label htmlFor="terms" className="text-[11px] text-gray-500 select-none cursor-pointer">
-                I agree to Minmart&apos;s{' '}
-                <Link href="/terms" className="font-semibold text-gray-900 hover:underline">
+              <label
+                htmlFor="terms"
+                className="text-[11px] text-gray-500 select-none cursor-pointer"
+              >
+                I agree to Minmart&apos;s{" "}
+                <Link
+                  href="/terms"
+                  className="font-semibold text-gray-900 hover:underline"
+                >
                   Terms
-                </Link>{' '}
-                and{' '}
-                <Link href="/privacy" className="font-semibold text-gray-900 hover:underline">
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/privacy"
+                  className="font-semibold text-gray-900 hover:underline"
+                >
                   Privacy Policy
                 </Link>
               </label>
@@ -338,7 +460,7 @@ export default function SignupPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#1db954] text-white hover:bg-[#1ed760] py-2.5 h-auto rounded-lg font-medium text-xs flex justify-center items-center shadow-sm transition-all mt-1 active:scale-[0.99] disabled:opacity-50"
+              className="w-full bg-[#1db954] text-white hover:bg-[#1ed760] py-2.5 h-auto rounded-lg font-medium text-xs flex justify-center items-center shadow-sm transition-all mt-1 active:scale-[0.99] disabled:opacity-50 cursor-pointer"
             >
               {isLoading ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -354,7 +476,9 @@ export default function SignupPage() {
           {/* Divider */}
           <div className="flex items-center my-4">
             <div className="flex-grow border-t border-gray-100"></div>
-            <span className="mx-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Or continue with</span>
+            <span className="mx-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">
+              Or continue with
+            </span>
             <div className="flex-grow border-t border-gray-100"></div>
           </div>
 
@@ -362,7 +486,9 @@ export default function SignupPage() {
           <div className="flex gap-2">
             <button
               type="button"
-              className="flex-1 flex items-center justify-center space-x-2 bg-white border border-gray-200 hover:bg-gray-50 py-2 rounded-lg text-xs font-medium text-gray-700 shadow-xs transition-all active:scale-[0.99] cursor-pointer"
+              onClick={handleGoogleSignUp}
+              disabled={isLoading}
+              className="flex-1 flex items-center justify-center space-x-2 bg-white border border-gray-200 hover:bg-gray-50 py-2 rounded-lg text-xs font-medium text-gray-700 shadow-xs transition-all active:scale-[0.99] cursor-pointer disabled:opacity-50"
             >
               <GoogleIcon />
               <span>Google</span>
@@ -379,15 +505,17 @@ export default function SignupPage() {
           {/* Footer Link */}
           <div className="mt-5 text-center">
             <p className="text-xs text-gray-500">
-              Already have an account?{' '}
-              <Link href="/login" className="text-[#1db954] hover:underline font-bold ml-0.5">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="text-[#1db954] hover:underline font-bold ml-0.5"
+              >
                 Sign In
               </Link>
             </p>
           </div>
         </div>
-
       </main>
     </div>
-  )
+  );
 }

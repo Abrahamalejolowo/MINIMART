@@ -249,7 +249,6 @@ function ShopPageContent() {
       return true;
     });
 
-
     if (sortBy === "low-high") {
       result = [...result].sort((a, b) => a.price - b.price);
     } else if (sortBy === "high-low") {
@@ -436,9 +435,9 @@ function ShopPageContent() {
 
         {/* MARKETPLACE CONTENT */}
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-4">
-            <aside className="lg:col-span-1">
-              <div className="sticky top-20">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+            <aside className="w-full lg:col-span-1">
+              <div className="lg:sticky lg:top-20">
                 <ShopFilters
                   filters={filters}
                   onFilterChange={handleFilterChange}
@@ -446,7 +445,7 @@ function ShopPageContent() {
               </div>
             </aside>
 
-            <section className="lg:col-span-3">
+            <section className="w-full lg:col-span-3 space-y-6">
               <div className="flex items-center justify-between pb-4 mb-6 border-b border-border gap-4">
                 <h2 className="text-lg font-black text-foreground capitalize">
                   {filters.category !== "all"
