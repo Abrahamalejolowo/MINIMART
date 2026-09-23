@@ -2,13 +2,11 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
-// Initialize Supabase Service Client
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-// Initialize Resend Email Client
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(req: Request) {
@@ -16,7 +14,6 @@ export async function POST(req: Request) {
     const body = await req.json()
     const { tx_ref, flutterwave_tx_id, shippingData, cart, total, paymentStatus } = body
 
-    // 1. Save Order Record to Supabase using exact schema column names
     const { data: order, error: dbError } = await supabase
       .from('orders')
       .upsert([
@@ -46,7 +43,6 @@ export async function POST(req: Request) {
       throw new Error(`Database error: ${dbError.message}`)
     }
 
-    // Generate HTML Item List for Emails
     const cartItemsHtml = cart
       .map(
         (item: any) => `
@@ -59,7 +55,6 @@ export async function POST(req: Request) {
       )
       .join('')
 
-    // 2. Email Customer (Order Receipt)
     await resend.emails.send({
       from: 'Minmart Store <onboarding@resend.dev>',
       to: [shippingData.email],
@@ -93,7 +88,6 @@ export async function POST(req: Request) {
       `,
     })
 
-    // 3. Email Store Owner (New Order Alert)
     const storeOwnerEmail = process.env.STORE_OWNER_EMAIL || 'your-email@gmail.com'
 
     await resend.emails.send({

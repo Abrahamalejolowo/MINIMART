@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { Resend } from 'resend'
 
 export async function POST(req: Request) {
   try {
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
     if (!supabaseUrl) {
       console.error("❌ Missing: NEXT_PUBLIC_SUPABASE_URL");
       return NextResponse.json(
-        { success: false, error: "Missing NEXT_PUBLIC_SUPABASE_URL in .env" },
+        { success: false, error: "Missing NEXT_PUBLIC_SUPABASE_URL in environment" },
         { status: 500 }
       );
     }
@@ -20,22 +21,15 @@ export async function POST(req: Request) {
     if (!serviceRoleKey) {
       console.error("❌ Missing: SUPABASE_SERVICE_ROLE_KEY");
       return NextResponse.json(
-        { success: false, error: "Missing SUPABASE_SERVICE_ROLE_KEY in .env" },
+        { success: false, error: "Missing SUPABASE_SERVICE_ROLE_KEY in environment" },
         { status: 500 }
       );
     }
-
-    console.log("✅ Environment variables found");
 
     // 2. PARSE REQUEST BODY
     let body;
     try {
       body = await req.json();
-      console.log("📦 Request body:", {
-        tx_ref: body.tx_ref,
-        flutterwave_tx_id: body.flutterwave_tx_id,
-        total: body.total,
-      });
     } catch (e) {
       console.error("❌ Failed to parse request JSON:", e);
       return NextResponse.json(
@@ -47,7 +41,7 @@ export async function POST(req: Request) {
     const { 
       tx_ref, 
       flutterwave_tx_id, 
-      shippingData, 
+      shippingData = {}, 
       cart, 
       total, 
       paymentStatus = "completed" 
@@ -55,7 +49,6 @@ export async function POST(req: Request) {
 
     // 3. VALIDATE REQUIRED FIELDS
     if (!tx_ref) {
-      console.error("❌ Missing: tx_ref");
       return NextResponse.json(
         { success: false, error: "Missing tx_ref" },
         { status: 400 }
@@ -63,7 +56,6 @@ export async function POST(req: Request) {
     }
 
     if (!cart || !Array.isArray(cart)) {
-      console.error("❌ Missing or invalid: cart");
       return NextResponse.json(
         { success: false, error: "Missing or invalid cart data" },
         { status: 400 }
@@ -71,7 +63,6 @@ export async function POST(req: Request) {
     }
 
     if (!total) {
-      console.error("❌ Missing: total");
       return NextResponse.json(
         { success: false, error: "Missing total amount" },
         { status: 400 }
@@ -80,30 +71,25 @@ export async function POST(req: Request) {
 
     // 4. CREATE SUPABASE CLIENT
     const supabase = createClient(supabaseUrl, serviceRoleKey);
-    console.log("✅ Supabase client created");
 
     // 5. PREPARE ORDER DATA
     const orderData = {
       id: tx_ref,
       flutterwave_tx_id: flutterwave_tx_id ? String(flutterwave_tx_id) : null,
-      user_name: shippingData 
-        ? `${shippingData.firstName || ''} ${shippingData.lastName || ''}`.trim() 
-        : '',
-      user_email: shippingData?.email || '',
-      user_phone: shippingData?.phone || '',
-      address_line1: shippingData?.address || null,
-      address_line2: shippingData?.addressLine2 || null,
-      city: shippingData?.city || null,
-      state: shippingData?.state || null,
-      country: shippingData?.country || 'Nigeria',
-      postal_code: shippingData?.zip || null,
+      user_name: `${shippingData.firstName || ''} ${shippingData.lastName || ''}`.trim(),
+      user_email: shippingData.email || '',
+      user_phone: shippingData.phone || '',
+      address_line1: shippingData.address || null,
+      address_line2: shippingData.addressLine2 || null,
+      city: shippingData.city || null,
+      state: shippingData.state || null,
+      country: shippingData.country || 'Nigeria',
+      postal_code: shippingData.zip || null,
       items: cart,
       amount: total,
       currency: 'NGN',
       status: paymentStatus,
     };
-
-    console.log("💾 Preparing to save order:", orderData);
 
     // 6. INSERT/UPDATE ORDER IN SUPABASE
     const { data: order, error: dbError } = await supabase
@@ -113,11 +99,7 @@ export async function POST(req: Request) {
       .single();
 
     if (dbError) {
-      console.error("❌ Database error:", {
-        code: dbError.code,
-        message: dbError.message,
-        details: dbError.details,
-      });
+      console.error("❌ Database error:", dbError);
       return NextResponse.json(
         { 
           success: false, 
@@ -128,17 +110,12 @@ export async function POST(req: Request) {
       );
     }
 
-    console.log("✅ Order saved successfully:", order?.id);
-
-    // 7. SEND EMAIL (OPTIONAL - DON'T CRASH IF IT FAILS)
-    if (process.env.RESEND_API_KEY) {
+    // 7. SEND EMAIL VIA RESEND
+    if (process.env.RESEND_API_KEY && shippingData.email) {
       try {
-        console.log("📧 Attempting to send confirmation email...");
-        
-        const { Resend } = await import('resend');
         const resend = new Resend(process.env.RESEND_API_KEY);
         
-        const cartItemsHtml = (cart || [])
+        const cartItemsHtml = cart
           .map(
             (item: any) => `
             <li style="margin-bottom: 8px;">
@@ -149,30 +126,23 @@ export async function POST(req: Request) {
           )
           .join('');
 
-        const emailResult = await resend.emails.send({
+        await resend.emails.send({
           from: 'Minimart Store <onboarding@resend.dev>',
-          to: [shippingData?.email || ''],
+          to: [shippingData.email],
           subject: `Order Confirmation - #${tx_ref}`,
           html: `
-            <h2>Thank you for your order!</h2>
-            <p><strong>Order ID:</strong> ${tx_ref}</p>
-            <p><strong>Total Paid:</strong> ₦${Number(total).toLocaleString()}</p>
-            <h3>Items:</h3>
-            <ul>${cartItemsHtml}</ul>
+            <div style="font-family: sans-serif; max-width: 600px; padding: 20px;">
+              <h2>Thank you for your order, ${shippingData.firstName || 'Customer'}!</h2>
+              <p><strong>Order ID:</strong> ${tx_ref}</p>
+              <p><strong>Total Paid:</strong> ₦${Number(total).toLocaleString()}</p>
+              <h3>Purchased Items:</h3>
+              <ul>${cartItemsHtml}</ul>
+            </div>
           `,
         });
-        
-        if (emailResult.error) {
-          console.warn("⚠️ Email send failed:", emailResult.error);
-        } else if (emailResult.data?.id) {
-          console.log("✅ Email sent successfully:", emailResult.data.id);
-        }
       } catch (emailErr: any) {
         console.warn("⚠️ Email send failed (non-critical):", emailErr.message);
-        // Don't throw - email is optional
       }
-    } else {
-      console.log("ℹ️ Resend API key not configured - skipping email");
     }
 
     // 8. RETURN SUCCESS
@@ -183,10 +153,7 @@ export async function POST(req: Request) {
     }, { status: 200 });
 
   } catch (err: any) {
-    console.error("❌ Unexpected error in order API:", {
-      message: err.message,
-      stack: err.stack,
-    });
+    console.error("❌ Unexpected error in order API:", err);
     return NextResponse.json(
       { 
         success: false, 
