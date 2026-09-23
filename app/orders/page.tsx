@@ -1,126 +1,204 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-import { Resend } from 'resend'
+'use client'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+import {
+  LogOut,
+  ArrowRight,
+  ShoppingBag,
+  Package,
+  Layers,
+} from 'lucide-react'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+interface Order {
+  id: string
+  user_name: string
+  user_email: string
+  amount: number
+  status: string
+  created_at: string
+  items: any[]
+}
 
-export async function POST(req: Request) {
-  try {
-    const body = await req.json()
-    const { tx_ref, flutterwave_tx_id, shippingData, cart, total, paymentStatus } = body
+export default function OrdersPage() {
+  const [orders, setOrders] = useState<Order[]>([])
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
-    const { data: order, error: dbError } = await supabase
-      .from('orders')
-      .upsert([
-        {
-          id: tx_ref,
-          flutterwave_tx_id: flutterwave_tx_id ? String(flutterwave_tx_id) : null,
-          user_name: `${shippingData.firstName} ${shippingData.lastName}`,
-          user_email: shippingData.email,
-          user_phone: shippingData.phone,
-          address_line1: shippingData.address,
-          address_line2: shippingData.addressLine2 || null,
-          city: shippingData.city,
-          state: shippingData.state,
-          country: shippingData.country || 'Nigeria',
-          postal_code: shippingData.zip || null,
-          items: cart,
-          amount: total,
-          currency: 'NGN',
-          status: paymentStatus || 'completed',
-        },
-      ])
-      .select()
-      .single()
+  useEffect(() => {
+    fetchOrders()
+  }, [])
 
-    if (dbError) {
-      console.error('Database Insertion Error:', dbError)
-      throw new Error(`Database error: ${dbError.message}`)
+  const fetchOrders = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch('/api/orders')
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch orders')
+      }
+
+      setOrders(data.orders || [])
+    } catch (err) {
+      console.error('Error fetching orders:', err)
+      setOrders([])
+    } finally {
+      setLoading(false)
     }
-
-    const cartItemsHtml = cart
-      .map(
-        (item: any) => `
-        <li style="margin-bottom: 8px;">
-          <strong>${item.title || item.name}</strong> — Qty: ${item.quantity || 1} — ₦${(
-            (item.price || 0) * (item.quantity || 1)
-          ).toLocaleString()}
-        </li>
-      `
-      )
-      .join('')
-
-    await resend.emails.send({
-      from: 'Minmart Store <onboarding@resend.dev>',
-      to: [shippingData.email],
-      subject: `Order Confirmation - #${tx_ref}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; color: #1e293b;">
-          <h2 style="color: #059669; margin-top: 0;">Thank you for your order, ${shippingData.firstName}!</h2>
-          <p style="font-size: 14px; color: #64748b;">We have received your payment and are processing your shipment.</p>
-          
-          <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-          
-          <h3 style="font-size: 16px; margin-bottom: 12px;">Order Summary (${tx_ref})</h3>
-          <ul style="padding-left: 20px; font-size: 14px; color: #334155;">
-            ${cartItemsHtml}
-          </ul>
-          
-          <p style="font-size: 16px; font-weight: bold; margin-top: 16px;">
-            Total Paid: <span style="color: #059669;">₦${Number(total).toLocaleString()}</span>
-          </p>
-
-          <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-          
-          <h3 style="font-size: 16px; margin-bottom: 8px;">Delivery Details</h3>
-          <p style="font-size: 14px; color: #475569; margin: 0;">
-            ${shippingData.address}, ${shippingData.city}, ${shippingData.state}
-          </p>
-          <p style="font-size: 14px; color: #475569; margin: 4px 0 0 0;">
-            Phone: ${shippingData.phone}
-          </p>
-        </div>
-      `,
-    })
-
-    const storeOwnerEmail = process.env.STORE_OWNER_EMAIL || 'your-email@gmail.com'
-
-    await resend.emails.send({
-      from: 'Minmart Store <onboarding@resend.dev>',
-      to: [storeOwnerEmail],
-      subject: `🛍️ New Order Received! ₦${Number(total).toLocaleString()} (${shippingData.firstName})`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; color: #1e293b;">
-          <h2 style="color: #059669; margin-top: 0;">New Order Alert!</h2>
-          <p style="font-size: 14px; color: #64748b;">A new payment was completed on Minmart.</p>
-          
-          <div style="background-color: #f8fafc; border-radius: 8px; padding: 16px; margin: 16px 0;">
-            <h3 style="font-size: 14px; margin-top: 0; color: #0f172a;">Customer Details</h3>
-            <p style="font-size: 13px; margin: 4px 0;"><strong>Name:</strong> ${shippingData.firstName} ${shippingData.lastName}</p>
-            <p style="font-size: 13px; margin: 4px 0;"><strong>Email:</strong> ${shippingData.email}</p>
-            <p style="font-size: 13px; margin: 4px 0;"><strong>Phone:</strong> ${shippingData.phone}</p>
-            <p style="font-size: 13px; margin: 4px 0;"><strong>Address:</strong> ${shippingData.address}, ${shippingData.city}, ${shippingData.state}</p>
-          </div>
-
-          <h3 style="font-size: 15px; margin-bottom: 8px;">Items Purchased:</h3>
-          <ul style="padding-left: 20px; font-size: 14px;">
-            ${cartItemsHtml}
-          </ul>
-
-          <p style="font-size: 16px; font-weight: bold;">Total Amount: ₦${Number(total).toLocaleString()}</p>
-          <p style="font-size: 12px; color: #94a3b8;">Transaction Reference: ${tx_ref}</p>
-        </div>
-      `,
-    })
-
-    return NextResponse.json({ success: true, order })
-  } catch (err: any) {
-    console.error('Order Route Processing Error:', err)
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 })
   }
+
+  const handleLogout = () => {
+    document.cookie = 'user_logged_in=; path=/; max-age=0'
+    router.push('/login')
+  }
+
+  const getStatusBadgeStyles = (status: string) => {
+    switch (status) {
+      case 'paid':
+        return 'bg-green-500/10 text-green-600 border-green-500/20'
+      case 'processing':
+        return 'bg-amber-500/10 text-amber-600 border-amber-500/20'
+      case 'shipped':
+        return 'bg-blue-500/10 text-blue-600 border-blue-500/20'
+      case 'delivered':
+        return 'bg-green-500/10 text-green-600 border-green-500/20'
+      default:
+        return 'bg-gray-500/10 text-gray-600 border-gray-500/20'
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
+      {/* Header */}
+      <div className="sticky top-0 z-50 bg-[hsl(var(--card))] border-b border-[hsl(var(--border))] shadow-xs backdrop-blur-md">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-green-500 text-white flex items-center justify-center font-bold">
+              <Layers className="h-5 w-5" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold">My Orders</h1>
+              <p className="text-xs text-[hsl(var(--muted-foreground))]">Track your purchases</p>
+            </div>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-600 px-3.5 py-2 rounded-lg font-medium text-xs border border-red-500/20 transition-all"
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="hidden sm:inline">Logout</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {loading ? (
+          <div className="text-center py-16">
+            <div className="inline-block animate-spin rounded-full h-6 w-6 border-2 border-green-500 border-t-transparent mb-2"></div>
+            <p className="text-xs text-[hsl(var(--muted-foreground))]">Loading your orders...</p>
+          </div>
+        ) : orders.length > 0 ? (
+          <div className="space-y-4">
+            {orders.map((order) => {
+              const itemsList = Array.isArray(order.items) ? order.items : []
+              return (
+                <div
+                  key={order.id}
+                  className="bg-[hsl(var(--card))] rounded-xl border border-[hsl(var(--border))] p-4 sm:p-6 shadow-xs hover:border-[hsl(var(--green)/0.4)] transition-all"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4 pb-4 border-b border-[hsl(var(--border))]">
+                    <div>
+                      <p className="font-mono font-bold text-sm text-[hsl(var(--foreground))]">
+                        Order #{order.id.substring(0, 8)}
+                      </p>
+                      <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">
+                        {new Date(order.created_at).toLocaleDateString('en-NG', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}
+                      </p>
+                    </div>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold border uppercase tracking-wider w-fit ${getStatusBadgeStyles(
+                        order.status
+                      )}`}
+                    >
+                      {order.status}
+                    </span>
+                  </div>
+
+                  <div className="mb-4 pb-4 border-b border-[hsl(var(--border))]">
+                    <p className="text-xs text-[hsl(var(--muted-foreground))] mb-3">Items ordered:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {itemsList.slice(0, 5).map((item: any, idx: number) => (
+                        <div
+                          key={idx}
+                          className="relative w-10 h-10 rounded-lg bg-[hsl(var(--secondary))] border border-[hsl(var(--border))] overflow-hidden flex items-center justify-center"
+                          title={item.name || item.title}
+                        >
+                          {item.image ? (
+                            <Image
+                              src={item.image}
+                              alt={item.name || 'Product'}
+                              fill
+                              className="object-cover"
+                              sizes="40px"
+                              unoptimized
+                            />
+                          ) : (
+                            <ShoppingBag className="w-4 h-4 text-[hsl(var(--muted-foreground))]" />
+                          )}
+                        </div>
+                      ))}
+                      {itemsList.length > 5 && (
+                        <div className="w-10 h-10 rounded-lg bg-[hsl(var(--secondary))] border border-[hsl(var(--border))] flex items-center justify-center text-xs font-bold text-[hsl(var(--muted-foreground))]">
+                          +{itemsList.length - 5}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-[hsl(var(--muted-foreground))] mb-1">Total Amount</p>
+                      <p className="text-2xl font-bold text-green-500">
+                        ₦{Number(order.amount).toLocaleString()}
+                      </p>
+                    </div>
+                    <Link
+                      href={`/orders/${order.id}`}
+                      className="inline-flex items-center gap-2 text-green-500 font-semibold hover:gap-3 transition-all text-sm"
+                    >
+                      View Details
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-16 bg-[hsl(var(--card))] rounded-xl border border-[hsl(var(--border))] space-y-3">
+            <Package className="h-12 w-12 text-[hsl(var(--muted-foreground))] mx-auto opacity-50" />
+            <div>
+              <p className="text-lg font-semibold text-[hsl(var(--foreground))]">No orders yet</p>
+              <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">
+                Start shopping to see your orders here.
+              </p>
+            </div>
+            <Link
+              href="/shop"
+              className="inline-block mt-4 bg-green-500 text-white px-6 py-2 rounded-lg font-medium text-sm hover:bg-green-600 transition-all"
+            >
+              Continue Shopping
+            </Link>
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
