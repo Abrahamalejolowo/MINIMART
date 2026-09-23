@@ -3,6 +3,8 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 // 1. Centralize your protected route paths
 const PROTECTED_ROUTES = ['/checkout', '/dashboard', '/account', '/profile']
+const ADMIN_ROUTES = ['/admin'] // Admin routes
+const ADMIN_LOGIN_ROUTES = ['/admin/login'] // Login page (not protected)
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -12,12 +14,32 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith(route)
   )
 
-  // 3. Fast Exit: Bypass Supabase calls on public pages (like /, /shop, /about)
+  // 3. Check if accessing admin routes (except login)
+  const isAdminRoute = ADMIN_ROUTES.some((route) =>
+    pathname.startsWith(route)
+  )
+  const isAdminLoginRoute = ADMIN_LOGIN_ROUTES.some((route) =>
+    pathname.startsWith(route)
+  )
+
+  // 4. Handle admin routes (password protection)
+  if (isAdminRoute && !isAdminLoginRoute) {
+    const adminAuth = request.cookies.get('admin_logged_in')?.value
+
+    if (!adminAuth) {
+      // Redirect to admin login
+      return NextResponse.redirect(new URL('/admin/login', request.url))
+    }
+
+    return NextResponse.next()
+  }
+
+  // 5. Fast Exit: Bypass Supabase calls on public pages (like /, /shop, /about)
   if (!isProtectedRoute) {
     return NextResponse.next()
   }
 
-  // 4. Initialize Supabase Response & Client only for protected routes
+  // 6. Initialize Supabase Response & Client only for protected routes
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -39,12 +61,12 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // 5. Secure user validation check
+  // 7. Secure user validation check
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // 6. Redirect unauthenticated users
+  // 8. Redirect unauthenticated users
   if (!user) {
     const loginUrl = request.nextUrl.clone()
     loginUrl.pathname = '/login'
@@ -55,7 +77,7 @@ export async function middleware(request: NextRequest) {
   return supabaseResponse
 }
 
-// 7. Global Matcher: Exclude static assets, images, and next internal files
+// 9. Global Matcher: Exclude static assets, images, and next internal files
 export const config = {
   matcher: [
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',

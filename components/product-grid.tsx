@@ -116,7 +116,7 @@ export function ProductGrid({
 
               {/* Product Info */}
               <div className="p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-600">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-green-500">
                   {product.category}
                 </p>
 

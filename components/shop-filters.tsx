@@ -191,7 +191,7 @@ function ShopFiltersContent({ filters, onFilterChange }: ShopFiltersProps) {
                   <button
                     onClick={() => handleCategoryChange(category.id)}
                     className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition ${
-                      isSelected ? 'bg-green-600 text-white font-semibold' : 'bg-white text-foreground hover:bg-gray-50'
+                      isSelected ? 'bg-green-500 text-white font-semibold' : 'bg-white text-foreground hover:bg-gray-50'
                     }`}
                   >
                     <span>{category.name}</span>

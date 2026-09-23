@@ -338,7 +338,7 @@ export default function AboutPage() {
                 </Button>
               </Link>
 
-              <Link href="/partner" passHref className="w-full sm:w-auto">
+              <Link href="/coming-soon" passHref className="w-full sm:w-auto">
                 <Button variant="outline" className="w-full sm:w-auto border-zinc-200 bg-white text-zinc-700 hover:bg-gray-50 hover:border-zinc-300 font-bold text-sm px-8 py-6 rounded-xl transition-all shadow-xs">
                   Partner with Us
                 </Button>

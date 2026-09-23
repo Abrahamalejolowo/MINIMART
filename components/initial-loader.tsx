@@ -29,11 +29,11 @@ export function InitialLoader({ children }: { children: React.ReactNode }) {
             <div className="absolute h-24 w-24 rounded-full bg-green-500/20 blur-2xl animate-pulse" />
             
             {/* Main spinner */}
-            <Loader2 className="h-12 w-12 animate-spin text-[hsl(var(--green))]" />
+            <Loader2 className="h-12 w-12 animate-spin text-green-500" />
           </div>
 
           <div className="mt-6 flex items-center gap-2 font-black text-sm uppercase tracking-widest text-foreground">
-            <Sparkles className="h-4 w-4 text-[hsl(var(--green))]" />
+            <Sparkles className="h-4 w-4 text-green-500" />
             <span>Loading Minimart...</span>
           </div>
         </div>

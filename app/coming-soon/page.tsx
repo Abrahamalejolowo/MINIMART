@@ -44,7 +44,7 @@ export default function ComingSoonPage() {
         <div className="w-full max-w-3xl mx-auto flex flex-col items-center">
           
           {/* Status Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--green))]/30 bg-green-500/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-green-500 shadow-xs">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-green-500 shadow-xs">
             <Sparkles className="h-3.5 w-3.5" />
             <span>Coming Soon</span>
           </div>
@@ -78,7 +78,7 @@ export default function ComingSoonPage() {
 
           {/* Guarantee Note */}
           <div className="mt-6 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-            <ShieldCheck className="h-4 w-4 text-[hsl(var(--green))]" />
+            <ShieldCheck className="h-4 w-4 text-green-500" />
             <span>Verified local creators & guaranteed buyer protection.</span>
           </div>
 

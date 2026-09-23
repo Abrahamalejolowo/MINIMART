@@ -97,7 +97,7 @@ export default function CartPage() {
                   Discover top-rated products and local marketplace goods waiting for you in our store.
                 </p>
                 <Link href="/shop" className="mt-8 w-full sm:w-auto">
-                  <Button className="w-full sm:w-auto rounded-xl bg-green-600 px-8 py-6 text-sm font-bold text-white shadow-lg shadow-green-600 hover:bg-emerald-700 active:scale-95 transition-all">
+                  <Button className="w-full sm:w-auto rounded-xl bg-green-600 px-8 py-6 text-sm font-bold text-white shadow-lg shadow-green-600 hover:bg-green-600 active:scale-95 transition-all">
                     Explore Marketplace <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>

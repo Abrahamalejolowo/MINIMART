@@ -80,7 +80,7 @@ export function CategoriesSection() {
 
           <Link
             href="/shop"
-            className="hidden text-sm font-medium text-green-600 hover:underline md:inline"
+            className="hidden text-sm font-medium text-green-500 hover:underline md:inline"
           >
             View All →
           </Link>
@@ -142,7 +142,7 @@ export function CategoriesSection() {
         {/* MOBILE VIEW ALL */}
         <Link
           href="/shop"
-          className="mt-6 block text-center text-sm font-medium text-green-600 hover:underline md:hidden"
+          className="mt-6 block text-center text-sm font-medium text-green-500 hover:underline md:hidden"
         >
           View All →
         </Link>

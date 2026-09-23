@@ -104,7 +104,7 @@ export default function HeroSection() {
             transition={{ delay: 1 }}
             className="absolute bottom-5 right-5 flex items-center gap-2 rounded-xl bg-white px-4 py-3 shadow-xl z-10"
           >
-            <CheckCircle className="h-5 w-5 text-emerald-600" />
+            <CheckCircle className="h-5 w-5 text-green-500" />
             <p className="text-sm font-bold text-slate-900">
               100% Authentic Products
             </p>
